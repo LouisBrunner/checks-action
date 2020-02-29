@@ -4,6 +4,7 @@ on: # rebuild any PRs and main branch changes
   push:
     branches:
       - master
+      - 'feature/*'
       - 'releases/*'
 
 jobs:
@@ -15,14 +16,3 @@ jobs:
     - run: |
         npm install
         npm run all
-
-  # make sure the action works on a clean machines without building
-  test1:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - uses: ./
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-  # TODO: add more (race conditions, failures, etc)

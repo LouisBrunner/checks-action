@@ -4,6 +4,29 @@ author: 'Louis Brunner'
 inputs:
   token:
     description: 'your GITHUB_TOKEN'
+    required: true
+  name:
+    description: 'the name of your check'
+    required: true
+  conclusion:
+    description: 'the conclusion of your check'
+    required: true
+  status:
+    description: 'the status of your check'
+    required: false
+    default: completed
+  output:
+    description: 'the output of your check'
+    required: false
+  annotations:
+    description: 'the annotations of your check'
+    required: false
+  images:
+    description: 'the images of your check'
+    required: false
+  actions:
+    description: 'the actions of your check'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

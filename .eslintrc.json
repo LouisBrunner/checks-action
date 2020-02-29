@@ -14,6 +14,7 @@
     "project": "./tsconfig.eslint.json"
   },
   "rules": {
+    "@typescript-eslint/camelcase": ["off"]
   },
   "env": {
     "node": true,
