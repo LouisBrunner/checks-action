@@ -19,18 +19,16 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
 export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const token = getInput('token', {required: true});
   const name = getInput('name', {required: true});
-  const statusStr = getInput('status', {required: true});
-  const conclusionStr = getInput('conclusion', {required: true});
+  const status = getInput('status', {required: true}) as Inputs.Status;
+  const conclusion = getInput('conclusion', {required: true}) as Inputs.Conclusion;
 
-  if (!(statusStr in Inputs.Status)) {
-    throw new Error(`invalid value for 'status': '${statusStr}'`);
+  if (!Object.values(Inputs.Status).includes(status)) {
+    throw new Error(`invalid value for 'status': '${status}'`);
   }
-  const status = statusStr as Inputs.Status;
 
-  if (!(conclusionStr in Inputs.Conclusion)) {
-    throw new Error(`invalid value for 'conclusion': '${conclusionStr}'`);
+  if (!Object.values(Inputs.Conclusion).includes(conclusion)) {
+    throw new Error(`invalid value for 'conclusion': '${conclusion}'`);
   }
-  const conclusion = conclusionStr as Inputs.Conclusion;
 
   const output = parseJSON<Inputs.Output>(getInput, 'output');
   const annotations = parseJSON<Inputs.Annotations>(getInput, 'annotations');
