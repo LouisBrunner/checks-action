@@ -20,7 +20,8 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const token = getInput('token', {required: true});
   const name = getInput('name', {required: true});
   const status = getInput('status', {required: true}) as Inputs.Status;
-  const conclusion = getInput('conclusion', {required: true}) as Inputs.Conclusion;
+  const conclusion = getInput('conclusion', {required: true}).toLowerCase() as Inputs.Conclusion;
+  const actionURL = getInput('action_url');
 
   if (!Object.values(Inputs.Status).includes(status)) {
     throw new Error(`invalid value for 'status': '${status}'`);
@@ -35,11 +36,21 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const images = parseJSON<Inputs.Images>(getInput, 'images');
   const actions = parseJSON<Inputs.Actions>(getInput, 'actions');
 
+  if (!actionURL && (conclusion === Inputs.Conclusion.ActionRequired || actions)) {
+    throw new Error(`missing value for 'action_url'`);
+  }
+
+  if ((!output || !output.summary) && (annotations || images)) {
+    throw new Error(`missing value for 'output.summary'`);
+  }
+
   return {
     name,
     token,
     status,
     conclusion,
+
+    actionURL,
 
     output,
     annotations,

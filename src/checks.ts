@@ -14,17 +14,23 @@ const unpackInputs = (inputs: Inputs.Args): object => {
   let output;
   if (inputs.output) {
     output = {
+      title: inputs.name,
       summary: inputs.output.summary,
       text: inputs.output.text_description,
       actions: inputs.actions,
       images: inputs.images,
     };
   }
+  const more: {details_url?: string} = {};
+  if (inputs.conclusion === Inputs.Conclusion.ActionRequired || inputs.actions) {
+    more.details_url = inputs.actionURL;
+  }
   return {
     status: inputs.status.toString(),
     conclusion: inputs.conclusion.toString(),
     output,
     actions: inputs.actions,
+    ...more,
   };
 };
 

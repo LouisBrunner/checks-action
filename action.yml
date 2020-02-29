@@ -15,6 +15,9 @@ inputs:
     description: 'the status of your check'
     required: false
     default: completed
+  action_url:
+    description: 'the url to link to when using action_required as conclusion'
+    required: false
   output:
     description: 'the output of your check'
     required: false

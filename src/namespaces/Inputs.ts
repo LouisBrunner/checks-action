@@ -5,6 +5,9 @@ export type Args = {
   token: string;
   conclusion: Conclusion;
   status: Status;
+
+  actionURL: string;
+
   output?: Output;
   annotations?: Annotations;
   images?: Images;
