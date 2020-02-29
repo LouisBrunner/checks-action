@@ -152,7 +152,6 @@ jobs:
         images: ${{ steps.images.outputs.value }}
 
   ## With actions
-  # TODO: HOW DO WE SET THE WEBHOOK!
   test_with_actions:
     runs-on: ubuntu-latest
     steps:
