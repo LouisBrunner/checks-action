@@ -24,12 +24,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test Basic Success (Implicit)
         conclusion: success
-        output:
-          summary: Test was a success
-          text_description: |
-            This is a text description of the annotations and images
-            With more stuff
-            And more
+        output: |
+          {"summary":"Test was a success","text_description":"This is a text description of the annotations and images\nWith more stuff\nAnd more"}
 
   test_basic_failure:
     runs-on: ubuntu-latest
@@ -103,16 +99,11 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Annotations
         conclusion: success
-        output: # output.summary is required with annotations!
-          summary: Some warnings in README.md
-        annotations:
-          - path: README.md
-            annotation_level: warning
-            title: Spell Checker
-            message: Check your spelling for 'banaas'.
-            raw_details: Do you mean 'bananas' or 'banana'?
-            start_line: 1
-            end_line: 2
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
+        annotations: |
+          [{"path":"README.md","annotation_level":"warning","title":"Spell Checker","message":"Check your spelling for 'banaas'.","raw_details":"Do you mean 'bananas' or 'banana'?","start_line":1,"end_line":2}]
 
   test_with_annotations_from_run:
     runs-on: ubuntu-latest
@@ -126,8 +117,9 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Annotations From Run
         conclusion: success
-        output: # output.summary is required with annotations!
-          summary: Some warnings in README.md
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
         annotations: ${{ steps.annotations.outputs.value }}
 
   ## With images
@@ -140,12 +132,11 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Images
         conclusion: success
-        output: # output.summary is required with images!
-          summary: Some cool pics
-        images:
-          - alt: Cool pic
-            image_url: https://via.placeholder.com/150
-            caption: Cool description
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some cool pics"}
+        images: |
+          [{"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}]
 
   test_with_images_from_run:
     runs-on: ubuntu-latest
@@ -159,8 +150,9 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Images From Run
         conclusion: success
-        output: # output.summary is required with images!
-          summary: Some warnings in README.md
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
         images: ${{ steps.images.outputs.value }}
 
   ## With actions
@@ -174,10 +166,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Actions
         conclusion: success
-        actions:
-          - label: Click Me
-            description: Click me to get free RAM
-            identifier: sent_to_webhook
+        actions: |
+          [{"label":"Click Me","description":"Click me to get free RAM","identifier":"sent_to_webhook"}]
 
   test_with_actions_from_run:
     runs-on: ubuntu-latest
@@ -192,8 +182,8 @@ jobs:
         name: Test With Actions From Run
         conclusion: success
         # output.summary is required with actions!
-        output:
-          summary: Some warnings in README.md
+        output: |
+          {"summary":"Some warnings in README.md"}
         actions: ${{ steps.actions.outputs.value }}
 
   ## With init
