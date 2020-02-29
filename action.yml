@@ -1,10 +1,9 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'GitHub Checks'
+description: 'Wrapper around the GitHub Checks API'
+author: 'Louis Brunner'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    description: 'your GITHUB_TOKEN'
 runs:
   using: 'node12'
   main: 'dist/index.js'

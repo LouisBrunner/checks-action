@@ -7,17 +7,22 @@ on: # rebuild any PRs and main branch changes
       - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
+  # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - run: |
         npm install
         npm run all
-  test: # make sure the action works on a clean machine without building
+
+  # make sure the action works on a clean machines without building
+  test1:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - uses: ./
-      with: 
-        milliseconds: 1000
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  # TODO: add more (race conditions, failures, etc)

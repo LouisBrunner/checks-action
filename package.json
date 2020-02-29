@@ -1,31 +1,32 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "checks-action",
+  "version": "0.1.0",
   "private": true,
-  "description": "TypeScript template action",
-  "main": "lib/main.js",
+  "description": "GitHub Action which wraps calls to GitHub Checks API",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts",
-    "pack": "ncc build",
+    "format": "prettier --write *.js **/*.ts",
+    "format-check": "prettier --check *.js **/*.ts",
+    "lint": "eslint .",
+    "pack": "ncc build -m",
     "test": "jest",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/LouisBrunner/checks-action.git"
   },
   "keywords": [
+    "github",
     "actions",
-    "node",
-    "setup"
+    "checks"
   ],
-  "author": "YourNameOrOrganization",
+  "author": "Louis Brunner",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.0"
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^2.1.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
