@@ -1,6 +1,9 @@
 name: 'GitHub Checks'
 description: 'Wrapper around the GitHub Checks API'
 author: 'Louis Brunner'
+branding:
+  icon: 'check-circle'
+  color: 'green'
 inputs:
   token:
     description: 'your GITHUB_TOKEN'
@@ -16,7 +19,7 @@ inputs:
     required: false
     default: completed
   action_url:
-    description: 'the url to link to when using action_required as conclusion'
+    description: 'the url to call back to when using `action_required` as conclusion or with `actions`'
     required: false
   output:
     description: 'the output of your check'

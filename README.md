@@ -1,26 +1,89 @@
 # GitHub Actions: `checks-action` ![build-test](https://github.com/LouisBrunner/checks-action/workflows/build-test/badge.svg)
 
-TODO: description & usage
+This GitHub Action allows you to create [Check Runs](https://developer.github.com/v3/checks/runs/#create-a-check-run) directly from your GitHub Action workflow. While each job of a workflow already creates a Check Run, this Action allows to include `annotations`, `images`, `actions` or any other parameters supported by the [Check Runs API](https://developer.github.com/v3/checks/runs/#parameters).
+
+## Usage
+
+The following shows how to publish a Check Run which will have the same status as your job and contains the output of another action. This will be shown predominantly in a Pull Request or on the workflow run.
+
+```
+name: "build-test"
+on: [push]
+
+jobs:
+  test_something:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/create-outputs@v0.0.0-fake
+      id: test
+    - uses: LouisBrunner/checks-action@v0.1.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test XYZ
+        conclusion: ${{ job }}
+        output:
+          summary: ${{ steps.test.outputs.summary }}
+          text_description: ${{ steps.test.outputs.description }}
+```
+
+See the [examples workflow](.github/workflows/examples.yml) for more details and examples (and see the [associated runs](https://github.com/LouisBrunner/checks-action/actions?query=workflow%3Aexamples) to see how it will look like).
 
 ## Inputs
 
-### `who-to-greet`
+### `token`
 
-**Required** The name of the person to greet. Default `"World"`.
+**Required** Your `GITHUB_TOKEN`
 
-## Outputs
+### `name`
 
-### `time`
+**Required** The name of your check
 
-The time we greeted you.
+### `conclusion`
 
-## Example usage
+**Required** The conclusion of your check, can be either `success`, `failure`, `neutral`, `cancelled`, `timed_out` or `action_required`
 
-uses: actions/hello-world-javascript-action@v1
-with:
-  who-to-greet: 'Mona the Octocat'
+### `status`
 
-## TODOs
+_Optional_ The status of your check, defaults to `completed`, can be either `queued`, `in_progress`, `completed`
+
+### `action_url`
+
+_Optional_ The URL to call back to when using `action_required` as a `conclusion` of your check or when including `actions`
+
+See [Check Runs API (`action_required`)](https://developer.github.com/v3/checks/runs/#parameters) or [Check Runs API (`actions`)](https://developer.github.com/v3/checks/runs/#actions-object) for more information
+
+### `output`
+
+_Optional_ A JSON object (as a string) containing the output of your check, required when using `annotations` or `images`.
+
+Supports the following properties:
+
+ - `summary`: **Required**, summary of your check
+ - `text_description`: _Optional_, a text description of your annotation (if any)
+
+See [Check Runs API](https://developer.github.com/v3/checks/runs/#output-object) for more information
+
+### `annotations`
+
+_Optional_ A JSON array (as a string) containing the annotations of your check, requires `output` to be included.
+
+Supports the same properties with the same types and names as the [Check Runs API](https://developer.github.com/v3/checks/runs/#annotations-object)
+
+### `images`
+
+_Optional_ A JSON array (as a string) containing the images of your check, requires `output` to be included.
+
+Supports the same properties with the same types and names as the [Check Runs API](https://developer.github.com/v3/checks/runs/#images-object)
+
+### `actions`
+
+_Optional_ A JSON array (as a string) containing the actions of your check.
+
+Supports the same properties with the same types and names as the [Check Runs API](https://developer.github.com/v3/checks/runs/#actions-object)
+
+## Issues
 
  - Action Required conclusion: button doesn't work
  - Action elements: button doesn't work
