@@ -45,7 +45,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test 1 = Neutral
+        name: Test Basic Neutral
         conclusion: neutral
 
   test_basic_cancelled:
