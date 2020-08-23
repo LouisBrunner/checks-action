@@ -1,0 +1,242 @@
+name: "examples"
+on: [push]
+
+jobs:
+  # make sure the action works on a clean machines without building
+
+  ## Basic
+  test_basic_success:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Success
+        conclusion: success
+
+  test_basic_success_with_output:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Success (Implicit)
+        conclusion: success
+        output: |
+          {"summary":"Test was a success","text_description":"This is a text description of the annotations and images\nWith more stuff\nAnd more"}
+
+  test_basic_failure:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Failure
+        conclusion: failure
+
+  # Other codes
+  test_basic_neutral:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Neutral
+        conclusion: neutral
+
+  test_basic_cancelled:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Cancelled
+        conclusion: cancelled
+
+  test_basic_timed_out:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Timed Out
+        conclusion: timed_out
+
+  test_basic_action_required:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Action Required
+        conclusion: action_required
+        action_url: https://example.com
+
+  ## With annotations
+  test_with_annotations:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Annotations
+        conclusion: success
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
+        annotations: |
+          [{"path":"README.md","annotation_level":"warning","title":"Spell Checker","message":"Check your spelling for 'banaas'.","raw_details":"Do you mean 'bananas' or 'banana'?","start_line":1,"end_line":2}]
+
+  test_with_annotations_from_run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - id: annotations
+      run: |
+        echo ::set-output name=value::$ANNOTATIONS
+      env:
+        ANNOTATIONS: |
+          {"path":"README.md","start_line":1,"end_line":2,"message":"Check your spelling for 'banaas'.","annotation_level":"warning"}
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Annotations From Run
+        conclusion: success
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
+        annotations: ${{ steps.annotations.outputs.value }}
+
+  ## With images
+  test_with_images:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Images
+        conclusion: success
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some cool pics"}
+        images: |
+          [{"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}]
+
+  test_with_images_from_run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - id: images
+      run: |
+        echo ::set-output name=value::$IMAGES
+      env:
+        IMAGES: |
+          {"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Images From Run
+        conclusion: success
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
+        images: ${{ steps.images.outputs.value }}
+
+  ## With actions
+  test_with_actions:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Actions
+        conclusion: success
+        action_url: https://example.com
+        actions: |
+          [{"label":"Click Me","description":"Click me to get free RAM","identifier":"sent_to_webhook"}]
+
+  test_with_actions_from_run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - id: actions
+      run: |
+        echo ::set-output name=value::$ACTIONS
+      env:
+        ACTIONS: |
+          {"label":"Click Me","description":"Click me to get free RAM","identifier":"sent_to_webhook"}
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Actions From Run
+        conclusion: success
+        action_url: https://example.com
+        # output.summary is required with actions!
+        output: |
+          {"summary":"Some warnings in README.md"}
+        actions: ${{ steps.actions.outputs.value }}
+
+  ## With init
+  test_with_init:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Init
+        status: in_progress
+    - run: sleep 30
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: completed
+        conclusion: failure
+
+  test_with_init_implicit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test With Init (Implicit)
+        status: in_progress
+    - run: sleep 30
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        conclusion: failure
+
+  ## Based on job
+  test_based_job_success:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Based On Job (Success)
+        conclusion: ${{ job.status }}
+
+  test_based_job_failure:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: false
+    - uses: ./
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Based On Job (Failure)
+        conclusion: ${{ job.status }}
