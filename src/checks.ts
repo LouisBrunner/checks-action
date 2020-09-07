@@ -1,4 +1,5 @@
 import {GitHub} from '@actions/github/lib/utils';
+import * as core from '@actions/core';
 import * as Inputs from './namespaces/Inputs';
 
 type Ownership = {
@@ -26,7 +27,22 @@ const unpackInputs = (inputs: Inputs.Args): Record<string, unknown> => {
     conclusion?: string;
   } = {};
   if (inputs.conclusion === Inputs.Conclusion.ActionRequired || inputs.actions) {
+    if (inputs.detailsURL) {
+      const reasonList = [];
+      if (inputs.conclusion === Inputs.Conclusion.ActionRequired) {
+        reasonList.push(`'conclusion' is 'action_required'`);
+      }
+      if (inputs.actions) {
+        reasonList.push(`'actions' was provided`);
+      }
+      const reasons = reasonList.join(' and ');
+      core.warning(
+        `'details_url' was ignored in favor of 'action_url' because ${reasons} (see documentation for details)`,
+      );
+    }
     more.details_url = inputs.actionURL;
+  } else if (inputs.detailsURL) {
+    more.details_url = inputs.detailsURL;
   }
   if (inputs.conclusion) {
     more.conclusion = inputs.conclusion.toString();

@@ -54,6 +54,14 @@ _Optional_ The URL to call back to when using `action_required` as a `conclusion
 
 See [Check Runs API (`action_required`)](https://developer.github.com/v3/checks/runs/#parameters) or [Check Runs API (`actions`)](https://developer.github.com/v3/checks/runs/#actions-object) for more information
 
+Note that this will override `details_url` (see next) when `conclusion` is `action_required` or when `actions` is provided (the two inputs set the same check attribute, `details_url`)
+
+### `details_url`
+
+_Optional_ A URL with more details about your check, can be an third-party website, a preview of the changes to your Github Pages, etc
+
+Note that this will be overridden by `action_url` (see previous) when `conclusion` is `action_required` or when `actions` is provided (the two inputs set the same check attribute, `details_url`)
+
 ### `output`
 
 _Optional_ A JSON object (as a string) containing the output of your check, required when using `annotations` or `images`.
@@ -82,6 +90,8 @@ Supports the same properties with the same types and names as the [Check Runs AP
 _Optional_ A JSON array (as a string) containing the actions of your check.
 
 Supports the same properties with the same types and names as the [Check Runs API](https://developer.github.com/v3/checks/runs/#actions-object)
+
+Note that this will override `details_url` as it relies on `action_url` (the two inputs set the same check attribute, `details_url`)
 
 ## Issues
 

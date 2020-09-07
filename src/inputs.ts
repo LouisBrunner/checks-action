@@ -22,6 +22,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const status = getInput('status', {required: true}) as Inputs.Status;
   let conclusion = getInput('conclusion') as Inputs.Conclusion;
   const actionURL = getInput('action_url');
+  const detailsURL = getInput('details_url');
 
   if (!Object.values(Inputs.Status).includes(status)) {
     throw new Error(`invalid value for 'status': '${status}'`);
@@ -64,6 +65,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
     conclusion,
 
     actionURL,
+    detailsURL,
 
     output,
     annotations,

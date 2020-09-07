@@ -7,6 +7,7 @@ export type Args = {
   status: Status;
 
   actionURL: string;
+  detailsURL?: string;
 
   output?: Output;
   annotations?: Annotations;

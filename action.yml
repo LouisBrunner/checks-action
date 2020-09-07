@@ -21,6 +21,9 @@ inputs:
   action_url:
     description: 'the url to call back to when using `action_required` as conclusion or with `actions`'
     required: false
+  details_url:
+    description: 'a URL with more details about your check, will be overriden by `action_url` depending on context'
+    required: false
   output:
     description: 'the output of your check'
     required: false
