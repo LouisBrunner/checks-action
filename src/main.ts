@@ -1,9 +1,12 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import * as Inputs from './namespaces/Inputs';
 import {parseInputs} from './inputs';
 import {createRun, updateRun} from './checks';
 
-const stateID = 'checkID';
+const isCreation = (inputs: Inputs.Args): inputs is Inputs.ArgsCreate => {
+  return !!(inputs as Inputs.ArgsCreate).name;
+};
 
 async function run(): Promise<void> {
   try {
@@ -19,30 +22,19 @@ async function run(): Promise<void> {
     };
     const sha = github.context.sha;
 
-    switch (inputs.status) {
-      case 'in_progress':
-      case 'queued': {
-        core.debug(`Creating a new Run`);
-        const id = await createRun(octokit, sha, ownership, inputs, {completed: false});
-        core.saveState(stateID, id.toString());
-        break;
-      }
-      case 'completed': {
-        const id = core.getState(stateID);
-        if (id) {
-          core.debug(`Updating a Run (${id})`);
-          await updateRun(octokit, parseInt(id), ownership, inputs);
-        } else {
-          core.debug(`Creating a new Run`);
-          await createRun(octokit, sha, ownership, inputs);
-        }
-        break;
-      }
+    if (isCreation(inputs)) {
+      core.debug(`Creating a new Run`);
+      const id = await createRun(octokit, inputs.name, sha, ownership, inputs);
+      core.setOutput('check_id', id);
+    } else {
+      const id = inputs.checkID;
+      core.debug(`Updating a Run (${id})`);
+      await updateRun(octokit, id, ownership, inputs);
     }
     core.debug(`Done`);
   } catch (e) {
     const error = e as Error;
-    core.debug(`Error: ${error.toString()}`);
+    core.debug(error.toString());
     core.setFailed(error.message);
   }
 }

@@ -1,19 +1,28 @@
 import {RestEndpointMethodTypes} from '@octokit/rest';
 
-export type Args = {
-  name: string;
+interface ArgsBase {
   token: string;
   conclusion?: Conclusion;
   status: Status;
 
-  actionURL: string;
+  actionURL?: string;
   detailsURL?: string;
 
   output?: Output;
   annotations?: Annotations;
   images?: Images;
   actions?: Actions;
-};
+}
+
+export interface ArgsCreate extends ArgsBase {
+  name: string;
+}
+
+export interface ArgsUpdate extends ArgsBase {
+  checkID: number;
+}
+
+export type Args = ArgsCreate | ArgsUpdate;
 
 // ChecksCreateParamsOutputAnnotations[]
 export type Annotations = NonNullable<

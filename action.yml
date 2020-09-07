@@ -9,8 +9,11 @@ inputs:
     description: 'your GITHUB_TOKEN'
     required: true
   name:
-    description: 'the name of your check'
-    required: true
+    description: 'the name of the check to create (incompatible with `check_id`)'
+    required: false
+  check_id:
+    description: 'ID of the check to update (incompatible with `name`)'
+    required: false
   conclusion:
     description: 'the conclusion of your check'
     required: false
@@ -36,6 +39,9 @@ inputs:
   actions:
     description: 'the actions of your check'
     required: false
+outputs:
+  check_id:
+    description: 'the ID of the created check, useful to update it in another action'
 runs:
   using: 'node12'
   main: 'dist/index.js'

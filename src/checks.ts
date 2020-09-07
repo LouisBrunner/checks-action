@@ -7,25 +7,20 @@ type Ownership = {
   repo: string;
 };
 
-type CreateOptions = {
-  completed: boolean;
-};
-
-const unpackInputs = (inputs: Inputs.Args, options: {update: boolean} = {update: false}): Record<string, unknown> => {
+const unpackInputs = (title: string, inputs: Inputs.Args): Record<string, unknown> => {
   let output;
   if (inputs.output) {
     output = {
-      title: options.update ? undefined : inputs.name,
+      title,
       summary: inputs.output.summary,
       text: inputs.output.text_description,
       actions: inputs.actions,
       images: inputs.images,
     };
   }
-  const more: {
-    details_url?: string;
-    conclusion?: string;
-  } = {};
+
+  let details_url;
+
   if (inputs.conclusion === Inputs.Conclusion.ActionRequired || inputs.actions) {
     if (inputs.detailsURL) {
       const reasonList = [];
@@ -36,22 +31,22 @@ const unpackInputs = (inputs: Inputs.Args, options: {update: boolean} = {update:
         reasonList.push(`'actions' was provided`);
       }
       const reasons = reasonList.join(' and ');
-      core.warning(
+      core.info(
         `'details_url' was ignored in favor of 'action_url' because ${reasons} (see documentation for details)`,
       );
     }
-    more.details_url = inputs.actionURL;
+    details_url = inputs.actionURL;
   } else if (inputs.detailsURL) {
-    more.details_url = inputs.detailsURL;
+    details_url = inputs.detailsURL;
   }
-  if (inputs.conclusion) {
-    more.conclusion = inputs.conclusion.toString();
-  }
+
   return {
     status: inputs.status.toString(),
     output,
     actions: inputs.actions,
-    ...more,
+    conclusion: inputs.conclusion ? inputs.conclusion.toString() : undefined,
+    completed_at: inputs.status === Inputs.Status.Completed ? formatDate() : undefined,
+    details_url,
   };
 };
 
@@ -61,22 +56,17 @@ const formatDate = (): string => {
 
 export const createRun = async (
   octokit: InstanceType<typeof GitHub>,
+  name: string,
   sha: string,
   ownership: Ownership,
   inputs: Inputs.Args,
-  options?: CreateOptions,
 ): Promise<number> => {
-  const dates: {completed_at?: string} = {};
-  if (!options || options.completed) {
-    dates.completed_at = formatDate();
-  }
   const {data} = await octokit.checks.create({
     ...ownership,
     head_sha: sha,
-    name: inputs.name,
+    name: name,
     started_at: formatDate(),
-    ...dates,
-    ...unpackInputs(inputs),
+    ...unpackInputs(name, inputs),
   });
   return data.id;
 };
@@ -87,10 +77,13 @@ export const updateRun = async (
   ownership: Ownership,
   inputs: Inputs.Args,
 ): Promise<void> => {
+  const previous = await octokit.checks.get({
+    ...ownership,
+    check_run_id: id,
+  });
   await octokit.checks.update({
     ...ownership,
     check_run_id: id,
-    completed_at: formatDate(),
-    ...unpackInputs(inputs, {update: true}),
+    ...unpackInputs(previous.data.name, inputs),
   });
 };

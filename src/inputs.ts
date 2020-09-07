@@ -18,11 +18,25 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
 
 export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const token = getInput('token', {required: true});
-  const name = getInput('name', {required: true});
+
+  const name = getInput('name');
+  const checkIDStr = getInput('check_id');
+
   const status = getInput('status', {required: true}) as Inputs.Status;
   let conclusion = getInput('conclusion') as Inputs.Conclusion;
+
   const actionURL = getInput('action_url');
   const detailsURL = getInput('details_url');
+
+  if (name && checkIDStr) {
+    throw new Error(`can only provide 'name' or 'check_id'`);
+  }
+
+  if (!name && !checkIDStr) {
+    throw new Error(`must provide 'name' or 'check_id'`);
+  }
+
+  const checkID = checkIDStr ? parseInt(checkIDStr) : undefined;
 
   if (!Object.values(Inputs.Status).includes(status)) {
     throw new Error(`invalid value for 'status': '${status}'`);
@@ -63,6 +77,8 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
     token,
     status,
     conclusion,
+
+    checkID,
 
     actionURL,
     detailsURL,

@@ -207,6 +207,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
+      id: init
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Init
@@ -215,8 +216,10 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Will not be used
+        check_id: ${{ steps.init.outputs.check_id }}
         status: completed
+        output: |
+          {"summary":"Some warnings in README.md"}
         conclusion: failure
 
   test_with_init_implicit:
@@ -224,6 +227,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: ./
+      id: init
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test With Init (Implicit)
@@ -232,8 +236,8 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Will not be used
-        conclusion: failure
+        check_id: ${{ steps.init.outputs.check_id }}
+        conclusion: success
 
   ## Based on job
   test_based_job_success:

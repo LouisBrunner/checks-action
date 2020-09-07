@@ -22,10 +22,9 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test XYZ
-        conclusion: ${{ job }}
-        output:
-          summary: ${{ steps.test.outputs.summary }}
-          text_description: ${{ steps.test.outputs.description }}
+        conclusion: ${{ job.status }}
+        output: |
+          {"summary":${{ steps.test.outputs.summary }}}
 ```
 
 See the [examples workflow](.github/workflows/examples.yml) for more details and examples (and see the [associated runs](https://github.com/LouisBrunner/checks-action/actions?query=workflow%3Aexamples) to see how it will look like).
@@ -38,7 +37,11 @@ See the [examples workflow](.github/workflows/examples.yml) for more details and
 
 ### `name`
 
-**Required** The name of your check
+**Required** for creation, the name of the check to create (mutually exclusive with `check_id`)
+
+### `check_id`
+
+**Required** for update, ID of the check to update (mutually exclusive with `name`)
 
 ### `conclusion`
 
@@ -93,9 +96,14 @@ Supports the same properties with the same types and names as the [Check Runs AP
 
 Note that this will override `details_url` as it relies on `action_url` (the two inputs set the same check attribute, `details_url`)
 
+## Outputs
+
+### `check_id`
+
+The ID of the created check, useful to update it in another action (e.g. non-`completed` `status`)
+
 ## Issues
 
- - Action Required conclusion: button doesn't work
- - Action elements: button doesn't work
+ - Action Required conclusion: button doesn't work?
+ - Action elements: button doesn't work?
  - Non-completed status: too many arguments required
- - Name is required when completing a non-`completed` `status` check even though we don't use it (see examples `test_with_init*`)
