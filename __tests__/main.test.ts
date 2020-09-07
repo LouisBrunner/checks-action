@@ -16,8 +16,10 @@ test('test runs', () => {
   try {
     console.log(cp.execSync(`node ${ip}`, options).toString());
   } catch (e) {
-    console.log(e.stdout.toString());
-    throw e;
+    const error = e as Error & {stdout: Buffer};
+    const output = error.stdout.toString();
+    console.log(output);
+    expect(output).toMatch(/::debug::Error: HttpError: Bad credentials/);
   }
 });
 

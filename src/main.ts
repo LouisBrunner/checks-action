@@ -11,7 +11,7 @@ async function run(): Promise<void> {
     const inputs = parseInputs(core.getInput);
 
     core.debug(`Setting up OctoKit`);
-    const octokit = new github.GitHub(inputs.token);
+    const octokit = github.getOctokit(inputs.token);
 
     const ownership = {
       owner: github.context.repo.owner,
@@ -31,19 +31,20 @@ async function run(): Promise<void> {
         const id = core.getState(stateID);
         if (id) {
           core.debug(`Updating a Run (${id})`);
-          updateRun(octokit, parseInt(id), ownership, inputs);
+          await updateRun(octokit, parseInt(id), ownership, inputs);
         } else {
           core.debug(`Creating a new Run`);
-          createRun(octokit, sha, ownership, inputs);
+          await createRun(octokit, sha, ownership, inputs);
         }
         break;
       }
     }
     core.debug(`Done`);
-  } catch (error) {
-    core.debug(`Error: ${error}`);
+  } catch (e) {
+    const error = e as Error;
+    core.debug(`Error: ${error.toString()}`);
     core.setFailed(error.message);
   }
 }
 
-run();
+void run();

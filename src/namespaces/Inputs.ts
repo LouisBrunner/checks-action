@@ -1,4 +1,4 @@
-import {Octokit} from '@octokit/rest';
+import {RestEndpointMethodTypes} from '@octokit/rest';
 
 export type Args = {
   name: string;
@@ -14,11 +14,18 @@ export type Args = {
   actions?: Actions;
 };
 
-export type Annotations = Octokit.ChecksCreateParamsOutputAnnotations[];
+// ChecksCreateParamsOutputAnnotations[]
+export type Annotations = NonNullable<
+  NonNullable<RestEndpointMethodTypes['checks']['create']['parameters']['output']>['annotations']
+>;
 
-export type Images = Octokit.ChecksCreateParamsOutputImages[];
+// ChecksCreateParamsOutputImages[]
+export type Images = NonNullable<
+  NonNullable<RestEndpointMethodTypes['checks']['create']['parameters']['output']>['images']
+>;
 
-export type Actions = Octokit.ChecksCreateParamsActions[];
+// ChecksCreateParamsActions[]
+export type Actions = NonNullable<RestEndpointMethodTypes['checks']['create']['parameters']['actions']>;
 
 export type Output = {
   summary: string;

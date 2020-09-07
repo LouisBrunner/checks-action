@@ -9,10 +9,10 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
     return;
   }
   try {
-    const obj = JSON.parse(value);
-    return obj as T;
+    return JSON.parse(value) as T;
   } catch (e) {
-    throw new Error(`invalid format for '${property}: ${e.toString()}`);
+    const error = e as Error;
+    throw new Error(`invalid format for '${property}: ${error.toString()}`);
   }
 };
 

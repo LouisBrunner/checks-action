@@ -1,4 +1,4 @@
-import {GitHub} from '@actions/github';
+import {GitHub} from '@actions/github/lib/utils';
 import * as Inputs from './namespaces/Inputs';
 
 type Ownership = {
@@ -10,7 +10,7 @@ type CreateOptions = {
   completed: boolean;
 };
 
-const unpackInputs = (inputs: Inputs.Args): object => {
+const unpackInputs = (inputs: Inputs.Args): Record<string, unknown> => {
   let output;
   if (inputs.output) {
     output = {
@@ -39,7 +39,7 @@ const formatDate = (): string => {
 };
 
 export const createRun = async (
-  octokit: GitHub,
+  octokit: InstanceType<typeof GitHub>,
   sha: string,
   ownership: Ownership,
   inputs: Inputs.Args,
@@ -61,7 +61,7 @@ export const createRun = async (
 };
 
 export const updateRun = async (
-  octokit: GitHub,
+  octokit: InstanceType<typeof GitHub>,
   id: number,
   ownership: Ownership,
   inputs: Inputs.Args,

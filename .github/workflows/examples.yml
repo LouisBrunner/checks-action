@@ -140,7 +140,7 @@ jobs:
         echo ::set-output name=value::$IMAGES
       env:
         IMAGES: |
-          {"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}
+          [{"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}]
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -174,7 +174,7 @@ jobs:
         echo ::set-output name=value::$ACTIONS
       env:
         ACTIONS: |
-          {"label":"Click Me","description":"Click me to get free RAM","identifier":"sent_to_webhook"}
+          [{"label":"Click Me","description":"Click me to get free RAM","identifier":"sent_to_webhook"}]
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
