@@ -200,6 +200,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        name: Will not be used
         status: completed
         conclusion: failure
 
@@ -216,6 +217,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        name: Will not be used
         conclusion: failure
 
   ## Based on job

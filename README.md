@@ -42,7 +42,7 @@ See the [examples workflow](.github/workflows/examples.yml) for more details and
 
 ### `conclusion`
 
-**Required** The conclusion of your check, can be either `success`, `failure`, `neutral`, `cancelled`, `timed_out` or `action_required`
+_Optional_ (**Required** if `status` is `completed`, the default) The conclusion of your check, can be either `success`, `failure`, `neutral`, `cancelled`, `timed_out` or `action_required`
 
 ### `status`
 
@@ -88,3 +88,4 @@ Supports the same properties with the same types and names as the [Check Runs AP
  - Action Required conclusion: button doesn't work
  - Action elements: button doesn't work
  - Non-completed status: too many arguments required
+ - Name is required when completing a non-`completed` `status` check even though we don't use it (see examples `test_with_init*`)

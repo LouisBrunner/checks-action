@@ -21,13 +21,18 @@ const unpackInputs = (inputs: Inputs.Args): Record<string, unknown> => {
       images: inputs.images,
     };
   }
-  const more: {details_url?: string} = {};
+  const more: {
+    details_url?: string;
+    conclusion?: string;
+  } = {};
   if (inputs.conclusion === Inputs.Conclusion.ActionRequired || inputs.actions) {
     more.details_url = inputs.actionURL;
   }
+  if (inputs.conclusion) {
+    more.conclusion = inputs.conclusion.toString();
+  }
   return {
     status: inputs.status.toString(),
-    conclusion: inputs.conclusion.toString(),
     output,
     actions: inputs.actions,
     ...more,

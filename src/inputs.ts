@@ -20,15 +20,28 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const token = getInput('token', {required: true});
   const name = getInput('name', {required: true});
   const status = getInput('status', {required: true}) as Inputs.Status;
-  const conclusion = getInput('conclusion', {required: true}).toLowerCase() as Inputs.Conclusion;
+  let conclusion = getInput('conclusion') as Inputs.Conclusion;
   const actionURL = getInput('action_url');
 
   if (!Object.values(Inputs.Status).includes(status)) {
     throw new Error(`invalid value for 'status': '${status}'`);
   }
 
-  if (!Object.values(Inputs.Conclusion).includes(conclusion)) {
-    throw new Error(`invalid value for 'conclusion': '${conclusion}'`);
+  if (conclusion) {
+    conclusion = conclusion.toLowerCase() as Inputs.Conclusion;
+    if (!Object.values(Inputs.Conclusion).includes(conclusion)) {
+      throw new Error(`invalid value for 'conclusion': '${conclusion}'`);
+    }
+  }
+
+  if (status === Inputs.Status.Completed) {
+    if (!conclusion) {
+      throw new Error(`'conclusion' is required when 'status' is 'completed'`);
+    }
+  } else {
+    if (conclusion) {
+      throw new Error(`can't provide a 'conclusion' with a non-'completed' 'status'`);
+    }
   }
 
   const output = parseJSON<Inputs.Output>(getInput, 'output');

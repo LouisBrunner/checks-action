@@ -13,7 +13,7 @@ inputs:
     required: true
   conclusion:
     description: 'the conclusion of your check'
-    required: true
+    required: false
   status:
     description: 'the status of your check'
     required: false

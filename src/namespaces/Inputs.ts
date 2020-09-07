@@ -3,7 +3,7 @@ import {RestEndpointMethodTypes} from '@octokit/rest';
 export type Args = {
   name: string;
   token: string;
-  conclusion: Conclusion;
+  conclusion?: Conclusion;
   status: Status;
 
   actionURL: string;
