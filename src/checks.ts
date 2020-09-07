@@ -11,11 +11,11 @@ type CreateOptions = {
   completed: boolean;
 };
 
-const unpackInputs = (inputs: Inputs.Args): Record<string, unknown> => {
+const unpackInputs = (inputs: Inputs.Args, options: {update: boolean} = {update: false}): Record<string, unknown> => {
   let output;
   if (inputs.output) {
     output = {
-      title: inputs.name,
+      title: options.update ? undefined : inputs.name,
       summary: inputs.output.summary,
       text: inputs.output.text_description,
       actions: inputs.actions,
@@ -91,6 +91,6 @@ export const updateRun = async (
     ...ownership,
     check_run_id: id,
     completed_at: formatDate(),
-    ...unpackInputs(inputs),
+    ...unpackInputs(inputs, {update: true}),
   });
 };
