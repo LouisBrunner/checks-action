@@ -5,6 +5,11 @@ branding:
   icon: 'check-circle'
   color: 'green'
 inputs:
+  repo:
+    description: 'the target `owner/repo` to manage the check run on (defaults to the current repository'
+    required: false
+  sha:
+    description: 'the target commit''s SHA (defaults to the current commit)'
   token:
     description: 'your GITHUB_TOKEN'
     required: true

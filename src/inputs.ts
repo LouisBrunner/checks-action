@@ -17,6 +17,8 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
 };
 
 export const parseInputs = (getInput: GetInput): Inputs.Args => {
+  const repo = getInput('repo');
+  const sha = getInput('sha');
   const token = getInput('token', {required: true});
 
   const name = getInput('name');
@@ -73,6 +75,8 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   }
 
   return {
+    repo,
+    sha,
     name,
     token,
     status,

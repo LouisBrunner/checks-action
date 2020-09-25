@@ -1,6 +1,8 @@
 import {RestEndpointMethodTypes} from '@octokit/rest';
 
 interface ArgsBase {
+  repo?: string;
+  sha?: string;
   token: string;
   conclusion?: Conclusion;
   status: Status;
