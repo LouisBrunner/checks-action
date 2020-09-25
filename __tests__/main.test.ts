@@ -7,6 +7,7 @@ test('test runs (creation)', () => {
   const options: cp.ExecSyncOptions = {
     env: {
       GITHUB_REPOSITORY: 'LB/ABC',
+      GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
       INPUT_NAME: 'ABC',
       INPUT_STATUS: 'completed',
@@ -19,7 +20,7 @@ test('test runs (creation)', () => {
     const error = e as Error & {stdout: Buffer};
     const output = error.stdout.toString();
     console.log(output);
-    expect(output).toMatch(/::debug::Creating a new Run/);
+    expect(output).toMatch(/::debug::Creating a new Run on LB\/ABC@SHA/);
     expect(output).toMatch(/::debug::HttpError: Bad credentials/);
   }
 });
@@ -29,6 +30,7 @@ test('test runs (update)', () => {
   const options: cp.ExecSyncOptions = {
     env: {
       GITHUB_REPOSITORY: 'LB/ABC',
+      GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
       INPUT_CHECK_ID: '123',
       INPUT_STATUS: 'completed',
@@ -41,7 +43,7 @@ test('test runs (update)', () => {
     const error = e as Error & {stdout: Buffer};
     const output = error.stdout.toString();
     console.log(output);
-    expect(output).toMatch(/::debug::Updating a Run/);
+    expect(output).toMatch(/::debug::Updating a Run on LB\/ABC@SHA \(123\)/);
     expect(output).toMatch(/::debug::HttpError: Bad credentials/);
   }
 });

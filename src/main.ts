@@ -23,12 +23,12 @@ async function run(): Promise<void> {
     const sha = github.context.sha;
 
     if (isCreation(inputs)) {
-      core.debug(`Creating a new Run`);
+      core.debug(`Creating a new Run on ${ownership.owner}/${ownership.repo}@${sha}`);
       const id = await createRun(octokit, inputs.name, sha, ownership, inputs);
       core.setOutput('check_id', id);
     } else {
       const id = inputs.checkID;
-      core.debug(`Updating a Run (${id})`);
+      core.debug(`Updating a Run on ${ownership.owner}/${ownership.repo}@${sha} (${id})`);
       await updateRun(octokit, id, ownership, inputs);
     }
     core.debug(`Done`);
