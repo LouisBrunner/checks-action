@@ -73,7 +73,7 @@ test('test runs (creation on remote repository)', () => {
   }
 });
 
-test('test runs (update)', () => {
+test('test runs (update on remote repository)', () => {
   const entry = path.join(__dirname, '..', 'lib', 'main.js');
   const options: cp.ExecSyncOptions = {
     env: {
