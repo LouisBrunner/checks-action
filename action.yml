@@ -10,6 +10,7 @@ inputs:
     required: false
   sha:
     description: 'the target commit''s SHA (defaults to the current commit)'
+    required: false
   token:
     description: 'your GITHUB_TOKEN'
     required: true
