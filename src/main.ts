@@ -17,24 +17,19 @@ async function run(): Promise<void> {
     const octokit = github.getOctokit(inputs.token);
 
     const ownership = {
-      owner: '',
-      repo: '',
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
     };
-    let sha = '';
+    let sha = github.context.sha;
 
     if (inputs.repo) {
       const repo = inputs.repo.split('/');
       ownership.owner = repo[0];
       ownership.repo = repo[1];
-    } else {
-      ownership.owner = github.context.repo.owner;
-      ownership.repo = github.context.repo.repo;
     }
 
     if (inputs.sha) {
       sha = inputs.sha;
-    } else {
-      sha = github.context.sha;
     }
 
     if (isCreation(inputs)) {
