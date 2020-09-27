@@ -98,4 +98,28 @@ test('test runs (update on remote repository)', () => {
   }
 });
 
+test('test rejects invalid repo', () => {
+  const entry = path.join(__dirname, '..', 'lib', 'main.js');
+  const options: cp.ExecSyncOptions = {
+    env: {
+      GITHUB_REPOSITORY: 'LB/ABC',
+      GITHUB_SHA: 'SHA',
+      INPUT_TOKEN: 'ABC',
+      INPUT_CHECK_ID: '123',
+      INPUT_STATUS: 'completed',
+      INPUT_CONCLUSION: 'success',
+      INPUT_REPO: 'invalid',
+      INPUT_SHA: 'DEF',
+    },
+  };
+  try {
+    console.log(cp.execSync(`node ${entry}`, options).toString());
+  } catch (e) {
+    const error = e as Error & {stdout: Buffer};
+    const output = error.stdout.toString();
+    console.log(output);
+    expect(output).toMatch(/::debug::Error: repo needs to be in the {owner}\/{repository} format/);
+  }
+});
+
 // TODO: add more

@@ -30,6 +30,10 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const actionURL = getInput('action_url');
   const detailsURL = getInput('details_url');
 
+  if (repo && repo.split('/').length != 2) {
+    throw new Error('repo needs to be in the {owner}/{repository} format');
+  }
+
   if (name && checkIDStr) {
     throw new Error(`can only provide 'name' or 'check_id'`);
   }
