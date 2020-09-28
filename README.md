@@ -31,6 +31,14 @@ See the [examples workflow](.github/workflows/examples.yml) for more details and
 
 ## Inputs
 
+### `repo`
+
+_Optional_ The target repository (`owner/repo`) on which to manage the check run. Defaults to the current repository.
+
+### `sha`
+
+_Optional_ The SHA of the target commit. Defaults to the current commit.
+
 ### `token`
 
 **Required** Your `GITHUB_TOKEN`
