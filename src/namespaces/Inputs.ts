@@ -26,18 +26,20 @@ export interface ArgsUpdate extends ArgsBase {
 
 export type Args = ArgsCreate | ArgsUpdate;
 
-// ChecksCreateParamsOutputAnnotations[]
+// @octokit/rest > Endpoints.d.ts > ChecksCreateParamsOutputAnnotations[]
 export type Annotations = NonNullable<
   NonNullable<RestEndpointMethodTypes['checks']['create']['parameters']['output']>['annotations']
 >;
 
-// ChecksCreateParamsOutputImages[]
+// @octokit/rest > Endpoints.d.ts > ChecksCreateParamsOutputImages[]
 export type Images = NonNullable<
   NonNullable<RestEndpointMethodTypes['checks']['create']['parameters']['output']>['images']
 >;
 
-// ChecksCreateParamsActions[]
-export type Actions = NonNullable<RestEndpointMethodTypes['checks']['create']['parameters']['actions']>;
+// @octokit/rest > Endpoints.d.ts > ChecksCreateParamsActions[]
+export type Actions = NonNullable<
+  RestEndpointMethodTypes['checks']['create']['parameters']['actions']
+>;
 
 export type Output = {
   summary: string;
