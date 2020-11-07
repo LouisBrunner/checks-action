@@ -1,11 +1,33 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import * as Inputs from './namespaces/Inputs';
+import * as GitHub from './namespaces/GitHub';
 import {parseInputs} from './inputs';
 import {createRun, updateRun} from './checks';
 
 const isCreation = (inputs: Inputs.Args): inputs is Inputs.ArgsCreate => {
   return !!(inputs as Inputs.ArgsCreate).name;
+};
+
+// prettier-ignore
+const prEvents = [
+  'pull_request',
+  'pull_request_review',
+  'pull_request_review_comment',
+];
+
+const getSHA = (inputSHA: string | undefined): string => {
+  let sha = github.context.sha;
+  if (prEvents.includes(github.context.eventName)) {
+    const pull = github.context.payload.pull_request as GitHub.PullRequest;
+    if (pull?.head.sha) {
+      sha = pull?.head.sha;
+    }
+  }
+  if (inputSHA) {
+    sha = inputSHA;
+  }
+  return sha;
 };
 
 async function run(): Promise<void> {
@@ -20,16 +42,12 @@ async function run(): Promise<void> {
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
     };
-    let sha = github.context.sha;
+    const sha = getSHA(inputs.sha);
 
     if (inputs.repo) {
       const repo = inputs.repo.split('/');
       ownership.owner = repo[0];
       ownership.repo = repo[1];
-    }
-
-    if (inputs.sha) {
-      sha = inputs.sha;
     }
 
     if (isCreation(inputs)) {
