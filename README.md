@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/create-outputs@v0.0.0-fake
       id: test
-    - uses: LouisBrunner/checks-action@v0.1.0
+    - uses: LouisBrunner/checks-action@v1.1.1
       if: always()
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
