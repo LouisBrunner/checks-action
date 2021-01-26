@@ -15,6 +15,7 @@ const unpackInputs = (title: string, inputs: Inputs.Args): Record<string, unknow
       summary: inputs.output.summary,
       text: inputs.output.text_description,
       actions: inputs.actions,
+      annotations: inputs.annotations,
       images: inputs.images,
     };
   }
