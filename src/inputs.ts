@@ -1,5 +1,6 @@
 import {InputOptions} from '@actions/core';
 import * as Inputs from './namespaces/Inputs';
+import fs from 'fs';
 
 type GetInput = (name: string, options?: InputOptions | undefined) => string;
 
@@ -76,7 +77,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   }
 
   if (output && output_text_description_file) {
-    output.text_description = `I was set by the action!`;
+    output.text_description = fs.readFileSync(output_text_description_file, 'utf8');
   }
 
   if ((!output || !output.summary) && (annotations || images)) {
