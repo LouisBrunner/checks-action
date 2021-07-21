@@ -20,6 +20,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const repo = getInput('repo');
   const sha = getInput('sha');
   const token = getInput('token', {required: true});
+  const output_text_description_file = getInput('output_text_description_file');
 
   const name = getInput('name');
   const checkIDStr = getInput('check_id');
@@ -72,6 +73,10 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
 
   if (!actionURL && (conclusion === Inputs.Conclusion.ActionRequired || actions)) {
     throw new Error(`missing value for 'action_url'`);
+  }
+
+  if (output && output_text_description_file) {
+    output.text_description = `I was set by the action!`;
   }
 
   if ((!output || !output.summary) && (annotations || images)) {
