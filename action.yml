@@ -48,6 +48,10 @@ inputs:
   actions:
     description: 'the actions of your check'
     required: false
+  output_json:
+    description: 'a JSON string to be included in the Check report. This will be exposed in the Details section of the report, so DO NOT add sensitive variables'   
+    required: false
+    default: '{}'
 outputs:
   check_id:
     description: 'the ID of the created check, useful to update it in another action'
