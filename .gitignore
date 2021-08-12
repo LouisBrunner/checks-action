@@ -97,9 +97,3 @@ Thumbs.db
 # Ignore built ts files
 __tests__/runner/*
 lib
-
-# Ignore compiled JavaScript files
-src/namespaces/*.js
-src/*.js
-sample.js
-sample.ts
