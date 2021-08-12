@@ -1,6 +1,6 @@
 import {InputOptions} from '@actions/core';
 import * as Inputs from './namespaces/Inputs';
-import fs from 'fs';
+import * as fs from 'fs';
 
 type GetInput = (name: string, options?: InputOptions | undefined) => string;
 
@@ -22,6 +22,8 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const sha = getInput('sha');
   const token = getInput('token', {required: true});
   const output_text_description_file = getInput('output_text_description_file');
+  const output_json_string = getInput('output_json');
+  const outputs_start_indicator = "---- BEGIN CHECK OUTPUT ----"
 
   const name = getInput('name');
   const checkIDStr = getInput('check_id');
@@ -42,6 +44,21 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
 
   if (!name && !checkIDStr) {
     throw new Error(`must provide 'name' or 'check_id'`);
+  }
+
+  if (output_json_string) {
+    try {
+      var output_json = JSON.parse(output_json_string);
+      var pretty_output_json = JSON.stringify(output_json,null,2);
+      var output_markdown = `
+# Outputs
+\`\`\`json ${outputs_start_indicator}
+${pretty_output_json}
+\`\`\``;
+
+    } catch (e) {
+      throw new Error(`'output_json' is malformed: '${output_json_string}'`);
+    }
   }
 
   const checkID = checkIDStr ? parseInt(checkIDStr) : undefined;
@@ -76,8 +93,15 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
     throw new Error(`missing value for 'action_url'`);
   }
 
-  if (output && output_text_description_file) {
+  if (output && output_text_description_file && output_markdown) {
+    fs.appendFileSync(output_text_description_file, output_markdown, 'utf8');
     output.text_description = fs.readFileSync(output_text_description_file, 'utf8');
+
+  } else if (output && output_text_description_file && !output_markdown) {    
+    output.text_description = fs.readFileSync(output_text_description_file, 'utf8');
+
+  } else if (output && output_markdown && !output_text_description_file) {
+    output.text_description = output_markdown;
   }
 
   if ((!output || !output.summary) && (annotations || images)) {

@@ -90,6 +90,12 @@ _Optional_ Path to a file containing text which should be set as the `text_descr
 
 Note that this will be ignored if `output` is not provided. When `output` is provided with a text_description, this input will take precedence and override it.
 
+### `output_json`
+
+_Optional_ an arbitrary JSON string to be included at the end of the Check report. This will be exposed in the `Details` section of the report in the GitHub UI, so _DO NOT_ add sensitive variables.
+
+This input will be ignored if `output` is not provided. If `output` and `output_text_description_file` are provided, this will append the JSON to `output_text_description_file`.
+
 ### `annotations`
 
 _Optional_ A JSON array (as a string) containing the annotations of your check, requires `output` to be included.
