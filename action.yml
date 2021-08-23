@@ -36,6 +36,9 @@ inputs:
   output:
     description: 'the output of your check'
     required: false
+  output_text_description_file:
+    description: 'path to a file containing text which should be set as the `text_description` of `output`'
+    required: false
   annotations:
     description: 'the annotations of your check'
     required: false

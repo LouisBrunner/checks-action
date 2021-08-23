@@ -84,6 +84,12 @@ Supports the following properties:
 
 See [Check Runs API](https://developer.github.com/v3/checks/runs/#output-object) for more information
 
+### `output_text_description_file`
+
+_Optional_ Path to a file containing text which should be set as the `text_description` property of `output`'. Can contain plain text or markdown.
+
+Note that this will be ignored if `output` is not provided. When `output` is provided with a text_description, this input will take precedence and override it.
+
 ### `annotations`
 
 _Optional_ A JSON array (as a string) containing the annotations of your check, requires `output` to be included.
