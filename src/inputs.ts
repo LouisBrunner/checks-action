@@ -2,6 +2,9 @@ import {InputOptions} from '@actions/core';
 import * as Inputs from './namespaces/Inputs';
 import * as fs from 'fs';
 
+const GITHUB_CHECKS_MAX_CHARS = 65535; // The maximum character limit for GitHub Checks' output.summary and output.text
+const OUTPUT_JSON_START_INDICATOR = '---- BEGIN CHECK OUTPUT ----'; // Pre-agreed upon string for machine parsing
+
 type GetInput = (name: string, options?: InputOptions | undefined) => string;
 
 const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
@@ -23,9 +26,9 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
  * @param {string} [outputStartIndicator] - a pre-defined string to be used in machine-parsing
  * @return {string} - a markdown JSON string
  */
-function buildJsonMarkdnown(
+function buildJsonMarkdown(
   outputJson: Inputs.Output | undefined,
-  outputStartIndicator = '---- BEGIN CHECK OUTPUT ----',
+  outputStartIndicator = OUTPUT_JSON_START_INDICATOR,
 ): string {
   const prettyOutputJSON = JSON.stringify(outputJson, null, 2);
   const jsonOutputMarkdown = `
@@ -60,18 +63,17 @@ function truncateStringChars(
   }
 
   // String is too long, we need to trim it
-  const seperatorLength = removalIndicator.length;
-  const numCharsToKeep = maxChars - seperatorLength;
+  const separatorLength = removalIndicator.length;
+  const numCharsToKeep = maxChars - separatorLength;
 
-  if (removeFromBeginning) {
-    const startIndex = inputString.length - numCharsToKeep;
-    const endIndex = inputString.length;
-    const shortendString = removalIndicator + inputString.substring(startIndex, endIndex);
-    return shortendString;
-  } else {
-    const shortendString = inputString.substring(0, numCharsToKeep) + removalIndicator;
-    return shortendString;
-  }
+  const startIndex = removeFromBeginning ? inputString.length - numCharsToKeep : 0;
+  const endIndex = removeFromBeginning ? inputString.length : numCharsToKeep;
+  const shortendString = inputString.substring(startIndex, endIndex);
+  const combinedString = removeFromBeginning
+    ? removalIndicator + shortendString
+    : shortendString + removalIndicator;
+
+  return combinedString;
 }
 
 /**
@@ -80,7 +82,7 @@ function truncateStringChars(
  * @param {string} outputTextDescriptionInput - the detailed description as provided by the user
  * @param {string} outputMarkdownFileLocation - the path to a markdown report to be included in the summary
  * @param {Inputs.Output | undefined} outputJsonVars - a JSON object to be added to the report
- * @param {number} [maxChars=65535] - maximum number of characters to be allowed in output.summary and output.text. Defaults to the GitHub's limit
+ * @param {number} [maxChars=GITHUB_CHECKS_MAX_CHARS] - maximum number of characters to be allowed in output.summary and output.text. Defaults to the GitHub's limit
  * @return {string[]} a string array containing values for output.summary and output.text_description
  */
 function buildOutputForGitHubCheck(
@@ -88,19 +90,16 @@ function buildOutputForGitHubCheck(
   outputTextDescriptionInput = '',
   outputMarkdownFileLocation = '',
   outputJsonVars: Inputs.Output | undefined,
-  maxChars = 65535,
+  maxChars = GITHUB_CHECKS_MAX_CHARS,
 ): string[] {
   // Get raw values, preferring to read from a file if one is preovided
   const outputDescription = outputMarkdownFileLocation
     ? fs.readFileSync(outputMarkdownFileLocation, 'utf8')
     : outputTextDescriptionInput;
-  const jsonVars = buildJsonMarkdnown(outputJsonVars);
+  const jsonVars = buildJsonMarkdown(outputJsonVars);
 
   // Truncate report if too long or we need to append JSON variables
-  const shortEnough = outputDescription.length + jsonVars.length <= maxChars;
-  const truncatedReport = shortEnough
-    ? outputDescription
-    : truncateStringChars(outputDescription, maxChars - jsonVars.length, true);
+  const truncatedReport = truncateStringChars(outputDescription, maxChars - jsonVars.length, true);
 
   // Collate results. jsonVars may be empty
   const combinedOutputDescription = truncatedReport + jsonVars;
