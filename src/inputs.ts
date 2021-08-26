@@ -38,8 +38,7 @@ ${prettyOutputJSON}
 \`\`\``;
 
   const variablesExist = prettyOutputJSON != '{}';
-  const result = variablesExist ? jsonOutputMarkdown : '';
-  return result;
+  return variablesExist ? jsonOutputMarkdown : '';
 }
 
 /**
@@ -69,11 +68,9 @@ function truncateStringChars(
   const startIndex = removeFromBeginning ? inputString.length - numCharsToKeep : 0;
   const endIndex = removeFromBeginning ? inputString.length : numCharsToKeep;
   const shortendString = inputString.substring(startIndex, endIndex);
-  const combinedString = removeFromBeginning
+  return removeFromBeginning
     ? removalIndicator + shortendString
     : shortendString + removalIndicator;
-
-  return combinedString;
 }
 
 /**
@@ -105,9 +102,7 @@ function buildOutputForGitHubCheck(
   const combinedOutputDescription = truncatedReport + jsonVars;
   const summary = truncateStringChars(outputSummaryInput, maxChars, false);
 
-  // [output.summary, output.text_description]
-  const result = [summary, combinedOutputDescription];
-  return result;
+  return [summary, combinedOutputDescription];
 }
 
 export const parseInputs = (getInput: GetInput): Inputs.Args => {
