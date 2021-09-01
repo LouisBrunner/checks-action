@@ -2,6 +2,9 @@ import {InputOptions} from '@actions/core';
 import * as Inputs from './namespaces/Inputs';
 import * as fs from 'fs';
 
+const GITHUB_CHECKS_MAX_CHARS = 65535; // The maximum character limit for GitHub Checks' output.summary and output.text
+const OUTPUT_JSON_START_INDICATOR = '---- BEGIN CHECK OUTPUT ----'; // Pre-agreed upon string for machine parsing
+
 type GetInput = (name: string, options?: InputOptions | undefined) => string;
 
 const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
@@ -17,12 +20,96 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
   }
 };
 
+/**
+ * Formats user-inputted JSON variables into markdown
+ * @param {Inputs.Output | undefined} outputJson - the JSON object to transform in to markdown
+ * @param {string} [outputStartIndicator] - a pre-defined string to be used in machine-parsing
+ * @return {string} - a markdown JSON string
+ */
+function buildJsonMarkdown(
+  outputJson: Inputs.Output | undefined,
+  outputStartIndicator = OUTPUT_JSON_START_INDICATOR,
+): string {
+  const prettyOutputJSON = JSON.stringify(outputJson, null, 2);
+  const jsonOutputMarkdown = `
+# JSON Outputs
+\`\`\`json ${outputStartIndicator}
+${prettyOutputJSON}
+\`\`\``;
+
+  const variablesExist = prettyOutputJSON != '{}';
+  return variablesExist ? jsonOutputMarkdown : '';
+}
+
+/**
+ * Truncates a string to at most maxChars
+ * @param {string} inputString - The string to truncate
+ * @param {number} maxChars - How many characters should inputString be truncated to
+ * @param {boolean} [removeFromBeginning=true] - Controls whether excess characters should be removed from the beginning or end of the string
+ * @param {string} [removalIndicator="..."] - A string to indicate where the truncation of the text occured. Will be substituted in place of truncated text
+ * @return {string} a string which is no longer than maxChars in length
+ */
+function truncateStringChars(
+  inputString: string,
+  maxChars: number,
+  removeFromBeginning = true,
+  removalIndicator = '...',
+): string {
+  const shortEnough = inputString.length <= maxChars;
+
+  if (shortEnough) {
+    return inputString;
+  }
+
+  // String is too long, we need to trim it
+  const separatorLength = removalIndicator.length;
+  const numCharsToKeep = maxChars - separatorLength;
+
+  const startIndex = removeFromBeginning ? inputString.length - numCharsToKeep : 0;
+  const endIndex = removeFromBeginning ? inputString.length : numCharsToKeep;
+  const shortendString = inputString.substring(startIndex, endIndex);
+  return removeFromBeginning
+    ? removalIndicator + shortendString
+    : shortendString + removalIndicator;
+}
+
+/**
+ * Builds output.text_description and output.summary values
+ * @param {string} outputSummary - The output summary as provided by the user
+ * @param {string} outputTextDescriptionInput - the detailed description as provided by the user
+ * @param {string} outputMarkdownFileLocation - the path to a markdown report to be included in the summary
+ * @param {Inputs.Output | undefined} outputJsonVars - a JSON object to be added to the report
+ * @param {number} [maxChars=GITHUB_CHECKS_MAX_CHARS] - maximum number of characters to be allowed in output.summary and output.text. Defaults to the GitHub's limit
+ * @return {string[]} a string array containing values for output.summary and output.text_description
+ */
+function buildOutputForGitHubCheck(
+  outputSummaryInput = '',
+  outputTextDescriptionInput = '',
+  outputMarkdownFileLocation = '',
+  outputJsonVars: Inputs.Output | undefined,
+  maxChars = GITHUB_CHECKS_MAX_CHARS,
+): string[] {
+  // Get raw values, preferring to read from a file if one is preovided
+  const outputDescription = outputMarkdownFileLocation
+    ? fs.readFileSync(outputMarkdownFileLocation, 'utf8')
+    : outputTextDescriptionInput;
+  const jsonVars = buildJsonMarkdown(outputJsonVars);
+
+  // Truncate report if too long or we need to append JSON variables
+  const truncatedReport = truncateStringChars(outputDescription, maxChars - jsonVars.length, true);
+
+  // Collate results. jsonVars may be empty
+  const combinedOutputDescription = truncatedReport + jsonVars;
+  const summary = truncateStringChars(outputSummaryInput, maxChars, false);
+
+  return [summary, combinedOutputDescription];
+}
+
 export const parseInputs = (getInput: GetInput): Inputs.Args => {
   const repo = getInput('repo');
   const sha = getInput('sha');
   const token = getInput('token', {required: true});
-  const output_text_description_file = getInput('output_text_description_file');
-  const outputs_start_indicator = '---- BEGIN CHECK OUTPUT ----';
+  const outputTextDescriptionFile = getInput('output_text_description_file');
 
   const name = getInput('name');
   const checkIDStr = getInput('check_id');
@@ -69,7 +156,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   }
 
   const output = parseJSON<Inputs.Output>(getInput, 'output');
-  const output_json = parseJSON<Inputs.Output>(getInput, 'output_json');
+  const outputJson = parseJSON<Inputs.Output>(getInput, 'output_json');
   const annotations = parseJSON<Inputs.Annotations>(getInput, 'annotations');
   const images = parseJSON<Inputs.Images>(getInput, 'images');
   const actions = parseJSON<Inputs.Actions>(getInput, 'actions');
@@ -78,22 +165,13 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
     throw new Error(`missing value for 'action_url'`);
   }
 
-  const pretty_output_json = JSON.stringify(output_json, null, 2);
-  const json_output_markdown = `
-# JSON Outputs
-\`\`\`json ${outputs_start_indicator}
-${pretty_output_json}
-\`\`\``;
-
-  const should_append_json = pretty_output_json != '{}';
-
-  if (output && output_text_description_file && should_append_json) {
-    fs.appendFileSync(output_text_description_file, json_output_markdown, 'utf8');
-    output.text_description = fs.readFileSync(output_text_description_file, 'utf8');
-  } else if (output && output_text_description_file && !should_append_json) {
-    output.text_description = fs.readFileSync(output_text_description_file, 'utf8');
-  } else if (output && should_append_json && !output_text_description_file) {
-    output.text_description = json_output_markdown;
+  if (output) {
+    [output.summary, output.text_description] = buildOutputForGitHubCheck(
+      output.summary,
+      output.text_description,
+      outputTextDescriptionFile,
+      outputJson,
+    );
   }
 
   if ((!output || !output.summary) && (annotations || images)) {
