@@ -89,10 +89,11 @@ function buildOutputForGitHubCheck(
   outputJsonVars: Inputs.Output | undefined,
   maxChars = GITHUB_CHECKS_MAX_CHARS,
 ): string[] {
-  // Get raw values, preferring to read from a file if one is preovided
-  const outputDescription = outputMarkdownFileLocation
-    ? fs.readFileSync(outputMarkdownFileLocation, 'utf8')
-    : outputTextDescriptionInput;
+  // Get raw values, preferring to read from a file if one is provided
+  const outputDescription =
+    outputMarkdownFileLocation && fs.existsSync(outputMarkdownFileLocation)
+      ? fs.readFileSync(outputMarkdownFileLocation, 'utf8')
+      : outputTextDescriptionInput;
   const jsonVars = buildJsonMarkdown(outputJsonVars);
 
   // Truncate report if too long or we need to append JSON variables

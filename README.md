@@ -8,7 +8,12 @@ The following shows how to publish a Check Run which will have the same status a
 
 ```
 name: "build-test"
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      check_id:
+        description: CheckID to send report back to
+        required: true
 
 jobs:
   test_something:
@@ -17,11 +22,12 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/create-outputs@v0.0.0-fake
       id: test
-    - uses: LouisBrunner/checks-action@v1.1.1
+    - uses: DrizlyInc/checks-action@v1
       if: always()
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test XYZ
+        check_id: ${{ github.event.inputs.check_id }}
         conclusion: ${{ job.status }}
         output: |
           {"summary":${{ steps.test.outputs.summary }}}
