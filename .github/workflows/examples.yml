@@ -1,6 +1,8 @@
 name: "examples"
 on: [push]
 
+permissions: write-all
+
 jobs:
   # make sure the action works on a clean machines without building
 
