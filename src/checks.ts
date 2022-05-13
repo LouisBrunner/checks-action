@@ -70,9 +70,9 @@ export const createRun = async (
     ...unpackInputs(name, inputs),
   });
   console.log(`Status: ${status}`);
-  console.log("INPUTS:")
+  console.log('INPUTS:');
   console.log(inputs);
-  console.log("RESPONSE DATA:")
+  console.log('RESPONSE DATA:');
   console.log(data);
   return data.id;
 };
@@ -93,8 +93,8 @@ export const updateRun = async (
     ...unpackInputs(previous.data.name, inputs),
   });
 
-  console.log("INPUTS:")
+  console.log('INPUTS:');
   console.log(inputs);
-  console.log("RESULT:")
+  console.log('RESULT:');
   console.log(result);
 };
