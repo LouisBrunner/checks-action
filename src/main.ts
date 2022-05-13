@@ -36,7 +36,7 @@ async function run(): Promise<void> {
     const inputs = parseInputs(core.getInput);
 
     core.debug(`Setting up OctoKit`);
-    const octokit = github.getOctokit(inputs.token);
+    const octokit = github.getOctokit(inputs.token, {log: console});
 
     const ownership = {
       owner: github.context.repo.owner,
