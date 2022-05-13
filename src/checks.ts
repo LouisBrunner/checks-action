@@ -69,6 +69,8 @@ export const createRun = async (
     started_at: formatDate(),
     ...unpackInputs(name, inputs),
   });
+  console.log(data);
+  console.log(inputs);
   return data.id;
 };
 
