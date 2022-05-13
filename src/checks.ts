@@ -69,10 +69,13 @@ export const createRun = async (
     started_at: formatDate(),
     ...unpackInputs(name, inputs),
   });
-  console.log('INPUTS:');
-  console.log(inputs);
-  console.log(`Status: ${status}`);
-  console.log(url, headers, data);
+
+  console.log('INPUTS:', inputs);
+  console.log('STATUS:', status);
+  console.log('URL:', url);
+  console.log('HEADERS:', headers);
+  console.log('DATA:', data);
+
   return data.id;
 };
 
@@ -92,8 +95,9 @@ export const updateRun = async (
     ...unpackInputs(previous.data.name, inputs),
   });
 
-  console.log('INPUTS:');
-  console.log(inputs);
-  console.log(`Status: ${status}`);
-  console.log(url, headers, data);
+  console.log('INPUTS:', inputs);
+  console.log('STATUS:', status);
+  console.log('URL:', url);
+  console.log('HEADERS:', headers);
+  console.log('DATA:', data);
 };
