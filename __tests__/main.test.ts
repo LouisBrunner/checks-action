@@ -22,6 +22,7 @@ test('test runs (creation)', () => {
   const entry = path.join(__dirname, '..', 'lib', 'main.js');
   const options: cp.ExecSyncOptions = {
     env: {
+      ...process.env,
       GITHUB_REPOSITORY: 'LB/ABC',
       GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
@@ -45,6 +46,7 @@ test('test runs (update)', () => {
   const entry = path.join(__dirname, '..', 'lib', 'main.js');
   const options: cp.ExecSyncOptions = {
     env: {
+      ...process.env,
       GITHUB_REPOSITORY: 'LB/ABC',
       GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
@@ -68,6 +70,7 @@ test('test runs (creation on remote repository)', () => {
   const entry = path.join(__dirname, '..', 'lib', 'main.js');
   const options: cp.ExecSyncOptions = {
     env: {
+      ...process.env,
       GITHUB_REPOSITORY: 'LB/ABC',
       GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
@@ -93,6 +96,7 @@ test('test runs (update on remote repository)', () => {
   const entry = path.join(__dirname, '..', 'lib', 'main.js');
   const options: cp.ExecSyncOptions = {
     env: {
+      ...process.env,
       GITHUB_REPOSITORY: 'LB/ABC',
       GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
@@ -118,6 +122,7 @@ test('test rejects invalid repo', () => {
   const entry = path.join(__dirname, '..', 'lib', 'main.js');
   const options: cp.ExecSyncOptions = {
     env: {
+      ...process.env,
       GITHUB_REPOSITORY: 'LB/ABC',
       GITHUB_SHA: 'SHA',
       INPUT_TOKEN: 'ABC',
@@ -150,6 +155,7 @@ test('test runs (creation + pull_request)', () => {
     const entry = path.join(__dirname, '..', 'lib', 'main.js');
     const options: cp.ExecSyncOptions = {
       env: {
+        ...process.env,
         GITHUB_REPOSITORY: 'LB/ABC',
         GITHUB_SHA: 'SHA',
         GITHUB_EVENT_NAME: 'pull_request',
