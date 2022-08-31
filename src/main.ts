@@ -14,6 +14,7 @@ const prEvents = [
   'pull_request',
   'pull_request_review',
   'pull_request_review_comment',
+  'pull_request_target',
 ];
 
 const getSHA = (inputSHA: string | undefined): string => {
