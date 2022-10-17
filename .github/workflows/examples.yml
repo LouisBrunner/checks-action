@@ -118,7 +118,7 @@ jobs:
         echo "value=$ANNOTATIONS" >> $GITHUB_OUTPUT
       env:
         ANNOTATIONS: |
-          {"path":"README.md","start_line":1,"end_line":2,"message":"Check your spelling for 'banaas'.","annotation_level":"warning"}
+          [{"path":"README.md","start_line":1,"end_line":2,"message":"Check your spelling for 'banaas'.","annotation_level":"warning"}]
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
