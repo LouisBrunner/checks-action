@@ -115,7 +115,7 @@ jobs:
     - uses: actions/checkout@v1
     - id: annotations
       run: |
-        echo ::set-output name=value::$ANNOTATIONS
+        echo "value=$ANNOTATIONS" >> $GITHUB_OUTPUT
       env:
         ANNOTATIONS: |
           {"path":"README.md","start_line":1,"end_line":2,"message":"Check your spelling for 'banaas'.","annotation_level":"warning"}
