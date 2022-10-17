@@ -151,7 +151,7 @@ jobs:
     - uses: actions/checkout@v1
     - id: images
       run: |
-        echo ::set-output name=value::$IMAGES
+        echo "value=$IMAGES" >> $GITHUB_OUTPUT
       env:
         IMAGES: |
           [{"alt":"Cool pic","image_url":"https://via.placeholder.com/150","caption":"Cool description"}]
@@ -186,7 +186,7 @@ jobs:
     - uses: actions/checkout@v1
     - id: actions
       run: |
-        echo ::set-output name=value::$ACTIONS
+        echo "value=$ACTIONS" >> $GITHUB_OUTPUT
       env:
         ACTIONS: |
           [{"label":"Click Me","description":"Click me to get free RAM","identifier":"sent_to_webhook"}]
