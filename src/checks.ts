@@ -62,7 +62,7 @@ export const createRun = async (
   ownership: Ownership,
   inputs: Inputs.Args,
 ): Promise<number> => {
-  const {data} = await octokit.checks.create({
+  const {data} = await octokit.rest.checks.create({
     ...ownership,
     head_sha: sha,
     name: name,
@@ -78,11 +78,11 @@ export const updateRun = async (
   ownership: Ownership,
   inputs: Inputs.Args,
 ): Promise<void> => {
-  const previous = await octokit.checks.get({
+  const previous = await octokit.rest.checks.get({
     ...ownership,
     check_run_id: id,
   });
-  await octokit.checks.update({
+  await octokit.rest.checks.update({
     ...ownership,
     check_run_id: id,
     ...unpackInputs(previous.data.name, inputs),
