@@ -1,4 +1,5 @@
 import {InputOptions} from '@actions/core';
+import * as GitHub from './namespaces/GitHub';
 import * as Inputs from './namespaces/Inputs';
 import fs from 'fs';
 
@@ -68,9 +69,9 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   }
 
   const output = parseJSON<Inputs.Output>(getInput, 'output');
-  const annotations = parseJSON<Inputs.Annotations>(getInput, 'annotations');
-  const images = parseJSON<Inputs.Images>(getInput, 'images');
-  const actions = parseJSON<Inputs.Actions>(getInput, 'actions');
+  const annotations = parseJSON<GitHub.Annotations>(getInput, 'annotations');
+  const images = parseJSON<GitHub.Images>(getInput, 'images');
+  const actions = parseJSON<GitHub.Actions>(getInput, 'actions');
 
   if (!actionURL && (conclusion === Inputs.Conclusion.ActionRequired || actions)) {
     throw new Error(`missing value for 'action_url'`);
