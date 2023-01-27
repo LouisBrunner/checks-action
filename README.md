@@ -24,7 +24,7 @@ jobs:
         name: Test XYZ
         conclusion: ${{ job.status }}
         output: |
-          {"summary":${{ steps.test.outputs.summary }}}
+          {"summary":"${{ steps.test.outputs.summary }}"}
 ```
 
 See the [examples workflow](.github/workflows/examples.yml) for more details and examples (and see the [associated runs](https://github.com/LouisBrunner/checks-action/actions?query=workflow%3Aexamples) to see how it will look like).
