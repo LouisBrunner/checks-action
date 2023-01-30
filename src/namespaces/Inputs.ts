@@ -27,6 +27,7 @@ export interface ArgsUpdate extends ArgsBase {
 export type Args = ArgsCreate | ArgsUpdate;
 
 export type Output = {
+  title?: string;
   summary: string;
   text_description?: string;
 };

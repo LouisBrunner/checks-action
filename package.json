@@ -1,6 +1,6 @@
 {
   "name": "checks-action",
-  "version": "0.1.0",
+  "version": "1.6.0",
   "private": true,
   "description": "GitHub Action which wraps calls to GitHub Checks API",
   "main": "lib/main.js",

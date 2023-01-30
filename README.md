@@ -79,6 +79,7 @@ _Optional_ A JSON object (as a string) containing the output of your check, requ
 
 Supports the following properties:
 
+ - `title`: _Optional_, title of your check, defaults to `name`
  - `summary`: **Required**, summary of your check
  - `text_description`: _Optional_, a text description of your annotation (if any)
 
