@@ -53,7 +53,7 @@ _Optional_ The SHA of the target commit. Defaults to the current commit.
 
 ### `conclusion`
 
-_Optional_ (**Required** if `status` is `completed`, the default) The conclusion of your check, can be either `success`, `failure`, `neutral`, `cancelled`, `timed_out` or `action_required`
+_Optional_ (**Required** if `status` is `completed`, the default) The conclusion of your check, can be either `success`, `failure`, `neutral`, `cancelled`, `timed_out`, `action_required`, `skipped` or `stale`
 
 ### `status`
 
