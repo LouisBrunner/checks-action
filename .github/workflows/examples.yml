@@ -80,6 +80,26 @@ jobs:
         action_url: https://example.com/action
         details_url: https://example.com/details
 
+  test_basic_skipped:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Skipped
+        conclusion: skipped
+
+  test_basic_stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Test Basic Stale
+        conclusion: stale
+
   # With details
   test_with_details:
     runs-on: ubuntu-latest

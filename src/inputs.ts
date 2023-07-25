@@ -54,6 +54,9 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
   if (conclusion) {
     conclusion = conclusion.toLowerCase() as Inputs.Conclusion;
     if (!Object.values(Inputs.Conclusion).includes(conclusion)) {
+      if (conclusion.toString() === 'stale') {
+        throw new Error(`'stale' is a conclusion reserved for GitHub and cannot be set manually`);
+      }
       throw new Error(`invalid value for 'conclusion': '${conclusion}'`);
     }
   }
