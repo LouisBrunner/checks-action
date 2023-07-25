@@ -40,7 +40,6 @@ export enum Conclusion {
   TimedOut = 'timed_out',
   ActionRequired = 'action_required',
   Skipped = 'skipped',
-  Stale = 'stale',
 }
 
 export enum Status {

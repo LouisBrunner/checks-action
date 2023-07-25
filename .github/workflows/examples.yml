@@ -97,7 +97,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic stale
+        name: Test Basic Stale
         conclusion: stale
 
   # With details
