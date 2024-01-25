@@ -52,5 +52,5 @@ outputs:
   check_id:
     description: 'the ID of the created check, useful to update it in another action'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
