@@ -1,5 +1,6 @@
 import {RestEndpointMethodTypes} from '@octokit/plugin-rest-endpoint-methods';
 import {operations} from '@octokit/openapi-types';
+export {OctokitOptions} from '@octokit/core/dist-types/types';
 
 export type PullRequest = RestEndpointMethodTypes['pulls']['get']['response']['data'];
 
