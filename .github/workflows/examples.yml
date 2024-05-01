@@ -87,7 +87,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Skipped
+        name: Test Basic Skipped (skipped)
         conclusion: skipped
 
   # With details
@@ -220,7 +220,7 @@ jobs:
       id: init
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Init (passes)
+        name: Test With Init (fails)
         status: in_progress
     - run: sleep 30
     - uses: ./

@@ -100,14 +100,12 @@ describe('run action', () => {
     }
   };
 
-  type RequestHandler = {
-    (
-      method: string | undefined,
-      url: string | undefined,
-      headers: http.IncomingHttpHeaders,
-      body: Record<string, unknown> | undefined,
-    ): {status: number; headers: Record<string, string>; reply: Record<string, unknown>};
-  };
+  type RequestHandler = (
+    method: string | undefined,
+    url: string | undefined,
+    headers: http.IncomingHttpHeaders,
+    body: Record<string, unknown> | undefined,
+  ) => {status: number; headers: Record<string, string>; reply: Record<string, unknown>};
 
   const mockHTTPServer = async (
     handler: RequestHandler,
