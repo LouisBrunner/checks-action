@@ -4,6 +4,7 @@ import * as Inputs from './namespaces/Inputs';
 import * as GitHub from './namespaces/GitHub';
 import {parseInputs} from './inputs';
 import {createRun, updateRun} from './checks';
+import {useLocalFetcher, localFetcher} from './mocks';
 
 const isCreation = (inputs: Inputs.Args): inputs is Inputs.ArgsCreate => {
   return !!(inputs as Inputs.ArgsCreate).name;
@@ -16,6 +17,14 @@ const prEvents = [
   'pull_request_review_comment',
   'pull_request_target',
 ];
+
+const options: GitHub.OctokitOptions = useLocalFetcher
+  ? {
+      request: {
+        fetch: localFetcher,
+      },
+    }
+  : {};
 
 const getSHA = (inputSHA: string | undefined): string => {
   let sha = github.context.sha;
@@ -37,7 +46,7 @@ async function run(): Promise<void> {
     const inputs = parseInputs(core.getInput);
 
     core.debug(`Setting up OctoKit`);
-    const octokit = github.getOctokit(inputs.token);
+    const octokit = github.getOctokit(inputs.token, options);
 
     const ownership = {
       owner: github.context.repo.owner,
