@@ -222,7 +222,7 @@ describe('run action', () => {
     }
     const options: cp.ExecSyncOptions = {
       env: {
-        ...process.env,
+        PATH: process.env.PATH,
         GITHUB_REPOSITORY: 'LB/ABC',
         GITHUB_SHA: 'SHA1',
         INPUT_TOKEN: token,
