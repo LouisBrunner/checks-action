@@ -12,7 +12,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Success
+        name: Test Basic Success (passes)
         conclusion: success
 
   test_basic_success_with_output:
@@ -22,7 +22,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Success (Implicit)
+        name: Test Basic Success With Output (passes)
         conclusion: success
         output: |
           {"summary":"Test was a success","text_description":"This is a text description of the annotations and images\nWith more stuff\nAnd more"}
@@ -34,7 +34,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Failure
+        name: Test Basic Failure (fails)
         conclusion: failure
 
   # Other codes
@@ -45,7 +45,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Neutral
+        name: Test Basic Neutral (neutral)
         conclusion: neutral
 
   test_basic_cancelled:
@@ -55,7 +55,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Cancelled
+        name: Test Basic Cancelled (cancelled)
         conclusion: cancelled
 
   test_basic_timed_out:
@@ -65,7 +65,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Timed Out
+        name: Test Basic Timed Out (fails)
         conclusion: timed_out
 
   test_basic_action_required:
@@ -75,7 +75,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Action Required
+        name: Test Basic Action Required (action required)
         conclusion: action_required
         action_url: https://example.com/action
         details_url: https://example.com/details
@@ -90,16 +90,6 @@ jobs:
         name: Test Basic Skipped
         conclusion: skipped
 
-  test_basic_stale:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ./
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Basic Stale
-        conclusion: stale
-
   # With details
   test_with_details:
     runs-on: ubuntu-latest
@@ -108,7 +98,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Details
+        name: Test With Details (passes)
         conclusion: success
         action_url: https://example.com/action
         details_url: https://example.com/details
@@ -121,7 +111,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Annotations
+        name: Test With Annotations (passes)
         conclusion: success
         # output.summary is required with actions!
         output: |
@@ -142,7 +132,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Annotations From Run
+        name: Test With Annotations From Run (passes)
         conclusion: success
         # output.summary is required with actions!
         output: |
@@ -157,7 +147,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Images
+        name: Test With Images (passes)
         conclusion: success
         # output.summary is required with actions!
         output: |
@@ -178,7 +168,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Images From Run
+        name: Test With Images From Run (passes)
         conclusion: success
         # output.summary is required with actions!
         output: |
@@ -193,7 +183,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Actions
+        name: Test With Actions (passes)
         conclusion: success
         action_url: https://example.com/action
         details_url: https://example.com/details
@@ -213,7 +203,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Actions From Run
+        name: Test With Actions From Run (passes)
         conclusion: success
         action_url: https://example.com/action
         # output.summary is required with actions!
@@ -230,7 +220,7 @@ jobs:
       id: init
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Init
+        name: Test With Init (passes)
         status: in_progress
     - run: sleep 30
     - uses: ./
@@ -250,7 +240,7 @@ jobs:
       id: init
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test With Init (Implicit)
+        name: Test With Init Implicit (passes)
         status: in_progress
     - run: sleep 30
     - uses: ./
@@ -261,16 +251,18 @@ jobs:
 
   ## Based on job
   test_based_job_success:
+    name: "Test Job Success (passes)"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Based On Job (Success)
+        name: Test Based On Job (passes)
         conclusion: ${{ job.status }}
 
   test_based_job_failure:
+    name: "Test Job Failure (fails)"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -279,5 +271,5 @@ jobs:
       if: always()
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test Based On Job (Failure)
+        name: Test Based On Job (fails)
         conclusion: ${{ job.status }}
