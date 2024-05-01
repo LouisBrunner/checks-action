@@ -137,7 +137,7 @@ describe('run action', () => {
         reject(new Error('Timeout while starting mock HTTP server'));
       }, 1000);
 
-      server.listen(0, '127.0.0.1', () => {
+      server.listen(0, 'localhost', () => {
         clearTimeout(handle);
 
         let port = 'INVALID';
