@@ -1,0 +1,24 @@
+name: 'Update aggregate tags'
+on:
+  push:
+    tags:
+      - 'v*.*'
+
+jobs:
+  retag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Calculate short tag name
+        id: calculate_short_tag
+        run: |
+          TRUNC_VER=$(echo ${{ github.ref_name }} | cut -d '.' -f 1)
+          echo "Short tag: $TRUNC_VER"
+          echo "tag=$TRUNC_VER" >>  $GITHUB_OUTPUT
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          force_push_tag: true
+          tag: '${{ steps.calculate_short_tag.outputs.tag }}'
+          message: 'Points to ${{ github.ref_name }}'
