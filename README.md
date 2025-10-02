@@ -1,5 +1,7 @@
 # GitHub Actions: `checks-action` ![build-test](https://github.com/LouisBrunner/checks-action/workflows/build-test/badge.svg)
 
+Fake
+
 This GitHub Action allows you to create [Check Runs](https://developer.github.com/v3/checks/runs/#create-a-check-run) directly from your GitHub Action workflow. While each job of a workflow already creates a Check Run, this Action allows to include `annotations`, `images`, `actions` or any other parameters supported by the [Check Runs API](https://developer.github.com/v3/checks/runs/#parameters).
 
 ## Usage
