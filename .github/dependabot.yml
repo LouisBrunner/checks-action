@@ -1,10 +1,29 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: /
     schedule:
-      interval: "monthly"
-  - package-ecosystem: "github-actions"
-    directory: "/"
+      interval: weekly
+    groups:
+      actions-deps:
+        patterns:
+          - '*'
+
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "weekly"
+      interval: monthly
+    groups:
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - '*'
+      major-updates:
+        applies-to: version-updates
+        update-types:
+          - 'major'
+      minor-updates:
+        applies-to: version-updates
+        update-types:
+          - 'minor'
+          - 'patch'
