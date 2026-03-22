@@ -128,9 +128,9 @@ describe("run action", () => {
 					req.method,
 					req.url,
 					req.headers,
-					body !== ""
-						? (JSON.parse(body) as Record<string, unknown>)
-						: undefined,
+					body === ""
+						? undefined
+						: (JSON.parse(body) as Record<string, unknown>),
 				);
 				for (const [key, value] of Object.entries(headers)) {
 					res.setHeader(key, value);
@@ -183,7 +183,10 @@ describe("run action", () => {
 				error = line.split("::error::")[1];
 			}
 			if (line.startsWith("::set-output name=check_id::")) {
-				checkID = parseInt(line.split("::set-output name=check_id::")[1], 10);
+				checkID = Number.parseInt(
+					line.split("::set-output name=check_id::")[1],
+					10,
+				);
 			}
 		}
 		return { checkID, error, output };
