@@ -1,8 +1,8 @@
-name: 'Update aggregate tags'
+name: "Update aggregate tags"
 on:
   push:
     tags:
-      - 'v*.*'
+      - "v*.*"
 
 jobs:
   retag:
@@ -20,5 +20,5 @@ jobs:
       - uses: rickstaa/action-create-tag@v1
         with:
           force_push_tag: true
-          tag: '${{ steps.calculate_short_tag.outputs.tag }}'
-          message: 'Points to ${{ github.ref_name }}'
+          tag: "${{ steps.calculate_short_tag.outputs.tag }}"
+          message: "Points to ${{ github.ref_name }}"
