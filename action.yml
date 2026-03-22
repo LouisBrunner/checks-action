@@ -6,10 +6,10 @@ branding:
   color: 'green'
 inputs:
   repo:
-    description: 'the target `owner/repo` to manage the check run on (defaults to the current repository'
+    description: 'the target `owner/repo` to manage the check run on (defaults to the current repository)'
     required: false
   sha:
-    description: 'the target commit''s SHA (defaults to the current commit)'
+    description: "the target commit's SHA (defaults to the current commit)"
     required: false
   token:
     description: 'your GITHUB_TOKEN'
@@ -52,5 +52,5 @@ outputs:
   check_id:
     description: 'the ID of the created check, useful to update it in another action'
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

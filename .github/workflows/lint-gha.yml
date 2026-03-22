@@ -1,0 +1,28 @@
+name: Lint Github Actions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/**"
+  pull_request:
+    paths:
+      - ".github/**"
+
+jobs:
+  lint:
+    name: Lint YAML files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: .github
+          config_data: |
+            extends: default
+            rules:
+              line-length:
+                max: 120
+                level: warning
+              document-start: disable
+              truthy: disable

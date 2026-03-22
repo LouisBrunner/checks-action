@@ -1,15 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "strict": true,
-    "noImplicitAny": true,
-    "esModuleInterop": true
-  },
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts"
-  ]
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"esModuleInterop": true,
+		"module": "ES2022",
+		"moduleResolution": "bundler",
+		"noImplicitAny": true,
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"strict": true,
+		"target": "es2022",
+		"types": ["node"]
+	},
+	"exclude": ["node_modules", "**/*.test.ts"]
 }

@@ -1,15 +1,27 @@
-import {RestEndpointMethodTypes} from '@octokit/plugin-rest-endpoint-methods';
-import {operations} from '@octokit/openapi-types';
-export {OctokitOptions} from '@octokit/core/dist-types/types';
+import type { operations } from "@octokit/openapi-types";
+import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 
-export type PullRequest = RestEndpointMethodTypes['pulls']['get']['response']['data'];
+export { OctokitOptions } from "@octokit/core";
 
-type ChecksCreate = operations['checks/create']['requestBody']['content']['application/json'];
+export type PullRequest =
+	RestEndpointMethodTypes["pulls"]["get"]["response"]["data"];
 
-type Output = NonNullable<ChecksCreate['output']>;
+type ChecksCreate =
+	operations["checks/create"]["requestBody"]["content"]["application/json"];
 
-export type Annotations = NonNullable<Output['annotations']>;
+type ChecksCreateParameters =
+	RestEndpointMethodTypes["checks"]["create"]["parameters"];
 
-export type Images = NonNullable<Output['images']>;
+type ChecksUpdateParameters =
+	RestEndpointMethodTypes["checks"]["update"]["parameters"];
 
-export type Actions = NonNullable<ChecksCreate['actions']>;
+export type Inputs = Partial<ChecksCreateParameters> &
+	Partial<ChecksUpdateParameters>;
+
+type Output = NonNullable<ChecksCreate["output"]>;
+
+export type Annotations = NonNullable<Output["annotations"]>;
+
+export type Images = NonNullable<Output["images"]>;
+
+export type Actions = NonNullable<ChecksCreate["actions"]>;
