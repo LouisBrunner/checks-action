@@ -37,5 +37,6 @@
 		"typecheck": "tsc --noEmit",
 		"vet": "bun run typecheck && bunx @biomejs/biome check"
 	},
+	"type": "module",
 	"version": "2.0.0"
 }
