@@ -14,7 +14,7 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
 		return JSON.parse(value) as T;
 	} catch (e) {
 		const error = e as Error;
-		throw new Error(`invalid format for '${property}: ${error.toString()}`);
+		throw new Error(`invalid format for '${property}': ${error.toString()}`);
 	}
 };
 
