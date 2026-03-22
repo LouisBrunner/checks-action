@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import type { GitHub } from "@actions/github/lib/utils";
+import type * as GH from "./namespaces/GitHub";
 import * as Inputs from "./namespaces/Inputs";
 
 type Ownership = {
@@ -7,14 +8,10 @@ type Ownership = {
 	repo: string;
 };
 
-const unpackInputs = (
-	title: string,
-	inputs: Inputs.Args,
-): Record<string, unknown> => {
-	let output: Record<string, unknown> | undefined;
+const unpackInputs = (title: string, inputs: Inputs.Args): GH.Inputs => {
+	let output: GH.Inputs["output"];
 	if (inputs.output) {
 		output = {
-			actions: inputs.actions,
 			annotations: inputs.annotations,
 			images: inputs.images,
 			summary: inputs.output.summary,
@@ -51,10 +48,12 @@ const unpackInputs = (
 		actions: inputs.actions,
 		completed_at:
 			inputs.status === Inputs.Status.Completed ? formatDate() : undefined,
-		conclusion: inputs.conclusion ? inputs.conclusion.toString() : undefined,
+		conclusion: inputs.conclusion
+			? (inputs.conclusion.toString() as GH.Inputs["conclusion"])
+			: undefined,
 		details_url,
 		output,
-		status: inputs.status.toString(),
+		status: inputs.status.toString() as GH.Inputs["status"],
 	};
 };
 

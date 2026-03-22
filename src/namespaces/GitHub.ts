@@ -9,6 +9,15 @@ export type PullRequest =
 type ChecksCreate =
 	operations["checks/create"]["requestBody"]["content"]["application/json"];
 
+type ChecksCreateParameters =
+	RestEndpointMethodTypes["checks"]["create"]["parameters"];
+
+type ChecksUpdateParameters =
+	RestEndpointMethodTypes["checks"]["update"]["parameters"];
+
+export type Inputs = Partial<ChecksCreateParameters> &
+	Partial<ChecksUpdateParameters>;
+
 type Output = NonNullable<ChecksCreate["output"]>;
 
 export type Annotations = NonNullable<Output["annotations"]>;
