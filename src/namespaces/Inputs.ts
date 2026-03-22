@@ -1,49 +1,49 @@
-import {Actions, Annotations, Images} from './GitHub';
+import type { Actions, Annotations, Images } from "./GitHub";
 
 interface ArgsBase {
-  repo?: string;
-  sha?: string;
-  token: string;
-  conclusion?: Conclusion;
-  status: Status;
+	actions?: Actions;
 
-  actionURL?: string;
-  detailsURL?: string;
+	actionURL?: string;
+	annotations?: Annotations;
+	conclusion?: Conclusion;
+	detailsURL?: string;
+	images?: Images;
 
-  output?: Output;
-  annotations?: Annotations;
-  images?: Images;
-  actions?: Actions;
+	output?: Output;
+	repo?: string;
+	sha?: string;
+	status: Status;
+	token: string;
 }
 
 export interface ArgsCreate extends ArgsBase {
-  name: string;
+	name: string;
 }
 
 export interface ArgsUpdate extends ArgsBase {
-  checkID: number;
+	checkID: number;
 }
 
 export type Args = ArgsCreate | ArgsUpdate;
 
 export type Output = {
-  title?: string;
-  summary: string;
-  text_description?: string;
+	title?: string;
+	summary: string;
+	text_description?: string;
 };
 
 export enum Conclusion {
-  Success = 'success',
-  Failure = 'failure',
-  Neutral = 'neutral',
-  Cancelled = 'cancelled',
-  TimedOut = 'timed_out',
-  ActionRequired = 'action_required',
-  Skipped = 'skipped',
+	Success = "success",
+	Failure = "failure",
+	Neutral = "neutral",
+	Cancelled = "cancelled",
+	TimedOut = "timed_out",
+	ActionRequired = "action_required",
+	Skipped = "skipped",
 }
 
 export enum Status {
-  Queued = 'queued',
-  InProgress = 'in_progress',
-  Completed = 'completed',
+	Queued = "queued",
+	InProgress = "in_progress",
+	Completed = "completed",
 }

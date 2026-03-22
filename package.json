@@ -1,51 +1,41 @@
 {
-  "name": "checks-action",
-  "version": "2.0.0",
-  "private": true,
-  "description": "GitHub Action which wraps calls to GitHub Checks API",
-  "main": "lib/main.js",
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint '**/*.js' '**/*.ts'",
-    "pack": "ncc build -m",
-    "test": "jest",
-    "format": "prettier --write '**/*.js' '**/*.ts'",
-    "all": "npm run build && npm run lint && npm run pack && npm test"
-  },
-  "funding": {
-    "type": "individual",
-    "url": "https://github.com/sponsors/LouisBrunner"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LouisBrunner/checks-action.git"
-  },
-  "keywords": [
-    "github",
-    "actions",
-    "checks"
-  ],
-  "author": "Louis Brunner",
-  "license": "MIT",
-  "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.1",
-    "@octokit/rest": "^22.0.1"
-  },
-  "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.1",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "@vercel/ncc": "^0.38.4",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jest": "^28.11.0",
-    "eslint-plugin-prettier": "^5.5.5",
-    "jest": "^30.2.0",
-    "jest-circus": "^30.1.2",
-    "prettier": "^3.8.1",
-    "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3"
-  }
+	"author": "Louis Brunner",
+	"dependencies": {
+		"@actions/core": "^3.0.0",
+		"@actions/github": "^9.0.0",
+		"@octokit/rest": "^22.0.1"
+	},
+	"description": "GitHub Action which wraps calls to GitHub Checks API",
+	"devDependencies": {
+		"@biomejs/biome": "2.4.8",
+		"@types/node": "^25.5.0",
+		"typescript": "^5.9.3"
+	},
+	"funding": {
+		"type": "individual",
+		"url": "https://github.com/sponsors/LouisBrunner"
+	},
+	"keywords": [
+		"github",
+		"actions",
+		"checks"
+	],
+	"license": "MIT",
+	"main": "lib/main.js",
+	"name": "checks-action",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/LouisBrunner/checks-action.git"
+	},
+	"scripts": {
+		"all": "bun run vet && bun run build && bun run pack && bun run test",
+		"build": "tsc",
+		"format:fix": "bunx @biomejs/biome format --write .",
+		"pack": "bun build src/main.ts --outfile dist/index.js --target node --production",
+		"test": "bun test",
+		"typecheck": "tsc --noEmit",
+		"vet": "bun run typecheck && bunx @biomejs/biome check"
+	},
+	"version": "2.0.0"
 }
