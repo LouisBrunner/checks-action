@@ -7,6 +7,7 @@ interface ArgsBase {
 	annotations?: Annotations;
 	conclusion?: Conclusion;
 	detailsURL?: string;
+	githubAPIURL?: string;
 	images?: Images;
 
 	output?: Output;

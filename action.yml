@@ -5,6 +5,9 @@ branding:
   icon: 'check-circle'
   color: 'green'
 inputs:
+  github_api_url:
+    description: 'the base GitHub API URL (for GitHub Enterprise, e.g. https://github.example.com/api/v3)'
+    required: false
   repo:
     description: 'the target `owner/repo` to manage the check run on (defaults to the current repository)'
     required: false
