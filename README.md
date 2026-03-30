@@ -29,6 +29,28 @@ jobs:
 
 See the [examples workflow](.github/workflows/examples.yml) for more details and examples (and see the [associated runs](https://github.com/LouisBrunner/checks-action/actions?query=workflow%3Aexamples) to see how it will look like).
 
+### GitHub Enterprise Server
+
+When running on GitHub Enterprise Server, set `github_api_url` to your instance API endpoint:
+
+```yaml
+name: "build-test"
+on: [push]
+
+jobs:
+  test_something:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: LouisBrunner/checks-action@v2.0.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        github_api_url: https://github.example.com/api/v3
+        name: Test XYZ
+        conclusion: ${{ job.status }}
+```
+
 ### Permissions
 
 When the action is run as part of a Pull Request, your workflow might fail with the following error: `Error: Resource not accessible by integration`.
@@ -79,6 +101,10 @@ _Optional_ The SHA of the target commit. Defaults to the current commit.
 ### `token`
 
 **Required** Your `GITHUB_TOKEN`
+
+### `github_api_url`
+
+_Optional_ The base API URL to use for GitHub API requests. Useful for GitHub Enterprise Server, e.g. `https://github.example.com/api/v3`.
 
 ### `name`
 
