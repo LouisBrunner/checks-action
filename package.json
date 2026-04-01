@@ -7,7 +7,7 @@
 	},
 	"description": "GitHub Action which wraps calls to GitHub Checks API",
 	"devDependencies": {
-		"@biomejs/biome": "2.4.8",
+		"@biomejs/biome": "2.4.10",
 		"@types/node": "^25.5.0",
 		"typescript": "^5.9.3"
 	},
