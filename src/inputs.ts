@@ -19,6 +19,7 @@ const parseJSON = <T>(getInput: GetInput, property: string): T | undefined => {
 };
 
 export const parseInputs = (getInput: GetInput): Inputs.Args => {
+	const githubAPIURL = getInput("github_api_url");
 	const repo = getInput("repo");
 	const sha = getInput("sha");
 	const token = getInput("token", { required: true });
@@ -107,6 +108,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
 		checkID,
 		conclusion,
 		detailsURL,
+		githubAPIURL,
 		images,
 		name,
 

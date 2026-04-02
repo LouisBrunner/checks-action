@@ -193,6 +193,7 @@ describe("run action", () => {
 	};
 
 	const runAction = async ({
+		githubAPIURL,
 		repo,
 		sha,
 		token = "ABC",
@@ -204,6 +205,7 @@ describe("run action", () => {
 		conclusion,
 		testPort,
 	}: {
+		githubAPIURL: string | undefined;
 		repo: string | undefined;
 		sha: string | undefined;
 		token: string | undefined;
@@ -221,6 +223,9 @@ describe("run action", () => {
 	}> => {
 		const entry = path.join(__dirname, "..", "dist", "index.js");
 		const optional: Record<string, unknown> = {};
+		if (githubAPIURL !== undefined) {
+			optional.INPUT_GITHUB_API_URL = githubAPIURL;
+		}
 		if (repo !== undefined) {
 			optional.INPUT_REPO = repo;
 		}
@@ -283,6 +288,7 @@ describe("run action", () => {
 		checkID?: string;
 		eventName?: string;
 		eventRecord?: Record<string, unknown>;
+		githubAPIURL?: string;
 		repo?: string;
 		sha?: string;
 		token?: string;
@@ -295,6 +301,26 @@ describe("run action", () => {
 
 	const cases = ((): Case[] => {
 		return [
+			{
+				checkName: "testo",
+				conclusion: Conclusion.Success,
+				expectedCheckID: 456,
+				expectedRequests: [
+					{
+						body: {
+							conclusion: "success",
+							head_sha: "SHA1",
+							name: "testo",
+							status: "completed",
+						},
+						method: "POST",
+						url: "/api/v3/repos/LB/ABC/check-runs",
+					},
+				],
+				githubAPIURL: "https://ghe.example.com/api/v3",
+				name: "creation using custom github api url",
+				status: Status.Completed,
+			},
 			{
 				checkName: "testo",
 				conclusion: Conclusion.Success,
@@ -452,6 +478,7 @@ describe("run action", () => {
 						conclusion: rest.conclusion.toString(),
 						eventName: rest.eventName,
 						eventPath: rest.eventRecord ? filename : undefined,
+						githubAPIURL: rest.githubAPIURL,
 						id: rest.checkID,
 						name: rest.checkName,
 						repo: rest.repo,
