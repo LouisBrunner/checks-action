@@ -1,15 +1,15 @@
 {
 	"author": "Louis Brunner",
 	"dependencies": {
-		"@actions/core": "^3.0.0",
-		"@actions/github": "^9.0.0",
+		"@actions/core": "^3.0.1",
+		"@actions/github": "^9.1.1",
 		"@octokit/rest": "^22.0.1"
 	},
 	"description": "GitHub Action which wraps calls to GitHub Checks API",
 	"devDependencies": {
-		"@biomejs/biome": "2.4.10",
-		"@types/node": "^25.5.0",
-		"typescript": "^6.0.2"
+		"@biomejs/biome": "2.4.13",
+		"@types/node": "^25.6.0",
+		"typescript": "^6.0.3"
 	},
 	"funding": {
 		"type": "individual",
