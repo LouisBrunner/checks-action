@@ -16,4 +16,4 @@ jobs:
   test:
     uses: LouisBrunner/.github/.github/workflows/lint-bun.yml@main
     with:
-      command: bun run all
+      run: bun run all
