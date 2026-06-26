@@ -1,0 +1,10 @@
+name: Update aggregate tags
+
+on:
+  push:
+    tags:
+      - "v*.*"
+
+jobs:
+  retag:
+    uses: LouisBrunner/.github/.github/workflows/update-tags.yml@main
