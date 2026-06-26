@@ -1,29 +1,47 @@
 version: 2
 updates:
-  - package-ecosystem: 'github-actions'
-    directory: /
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: weekly
+      interval: "weekly"
     groups:
-      actions-deps:
-        patterns:
-          - '*'
-
-  - package-ecosystem: bun
-    directory: /
-    schedule:
-      interval: monthly
-    groups:
-      security-updates:
+      actions-security:
         applies-to: security-updates
         patterns:
-          - '*'
-      major-updates:
+          - "*"
+      actions-major:
         applies-to: version-updates
         update-types:
-          - 'major'
-      minor-updates:
+          - "major"
+        patterns:
+          - "*"
+      actions-minor:
         applies-to: version-updates
         update-types:
-          - 'minor'
-          - 'patch'
+          - "minor"
+          - "patch"
+        patterns:
+          - "*"
+
+  - package-ecosystem: "bun"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      bun-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      bun-major:
+        applies-to: version-updates
+        update-types:
+          - "major"
+        patterns:
+          - "*"
+      bun-minor:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "*"

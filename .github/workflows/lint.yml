@@ -1,0 +1,19 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  configs:
+    uses: LouisBrunner/.github/.github/workflows/lint-configs.yml@main
+
+  test:
+    uses: LouisBrunner/.github/.github/workflows/lint-bun.yml@main
+    with:
+      command: bun run all
