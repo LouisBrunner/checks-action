@@ -31,7 +31,7 @@
 	"scripts": {
 		"all": "bun run vet && bun run build && bun run pack && bun run test",
 		"build": "tsc",
-		"format:fix": "bunx @biomejs/biome format --write .",
+		"format:fix": "bunx @biomejs/biome check --write .",
 		"pack": "bun build src/main.ts --outfile dist/index.js --target node --production",
 		"test": "bun test",
 		"typecheck": "tsc --noEmit",

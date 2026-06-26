@@ -95,7 +95,7 @@ export const parseInputs = (getInput: GetInput): Inputs.Args => {
 		);
 	}
 
-	if ((!output || !output.summary) && (annotations || images)) {
+	if (!output?.summary && (annotations || images)) {
 		throw new Error(`missing value for 'output.summary'`);
 	}
 
