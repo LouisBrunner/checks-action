@@ -8,6 +8,7 @@ const replaceURL = (url: URL, port: string): URL => {
 };
 
 // biome-ignore lint/complexity/useLiteralKeys: bracket access required by noPropertyAccessFromIndexSignature
+// biome-ignore lint/style/noProcessEnv: test-only local server redirect, needs direct process.env access
 const localPort = env["INTERNAL_TESTING_MODE_HTTP_LOCAL_PORT"];
 
 export const useLocalFetcher = localPort !== undefined;

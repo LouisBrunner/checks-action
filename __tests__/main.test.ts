@@ -481,60 +481,63 @@ describe("run action", () => {
 		];
 	})();
 
-	test.each(cases)("with $name", async ({
-		expectedError,
-		expectedRequests,
-		expectedCheckID,
-		...rest
-	}: Case) => {
-		const requests: LoggedRequest[] = [];
+	test.each(cases)(
+		"with $name",
+		async ({
+			expectedError,
+			expectedRequests,
+			expectedCheckID,
+			...rest
+		}: Case) => {
+			const requests: LoggedRequest[] = [];
 
-		await mockHTTPServer(
-			(reqMethod, reqURL, _reqHeaders, reqBody) => {
-				if (reqBody !== undefined) {
-					reqBody.completed_at = undefined;
-					reqBody.started_at = undefined;
-				}
-				requests.push({ body: reqBody, method: reqMethod, url: reqURL });
-				let reply = {};
-				if (expectedCheckID !== undefined) {
-					reply = { id: expectedCheckID };
-				}
-				return {
-					headers: {
-						"content-type": "application/json",
-					},
-					reply,
-					status: 200,
-				};
-			},
-			async (port) => {
-				await mockEventFile(rest.eventRecord || {}, async (filename) => {
-					const props = {
-						conclusion: rest.conclusion.toString(),
-						eventName: rest.eventName,
-						eventPath: rest.eventRecord ? filename : undefined,
-						githubAPIURL: rest.githubAPIURL,
-						id: rest.checkID,
-						name: rest.checkName,
-						repo: rest.repo,
-						sha: rest.sha,
-						status: rest.status.toString(),
-						testPort: port,
-						token: rest.token,
-					};
-
-					const { error, checkID } = await runAction(props);
-
-					expect(error).toBe(expectedError);
-					expect(checkID).toBe(expectedCheckID);
-					if (expectedRequests === undefined) {
-						expect(requests).toEqual([]);
-					} else {
-						expect(requests).toEqual(expectedRequests);
+			await mockHTTPServer(
+				(reqMethod, reqURL, _reqHeaders, reqBody) => {
+					if (reqBody !== undefined) {
+						reqBody.completed_at = undefined;
+						reqBody.started_at = undefined;
 					}
-				});
-			},
-		);
-	});
+					requests.push({ body: reqBody, method: reqMethod, url: reqURL });
+					let reply = {};
+					if (expectedCheckID !== undefined) {
+						reply = { id: expectedCheckID };
+					}
+					return {
+						headers: {
+							"content-type": "application/json",
+						},
+						reply,
+						status: 200,
+					};
+				},
+				async (port) => {
+					await mockEventFile(rest.eventRecord || {}, async (filename) => {
+						const props = {
+							conclusion: rest.conclusion.toString(),
+							eventName: rest.eventName,
+							eventPath: rest.eventRecord ? filename : undefined,
+							githubAPIURL: rest.githubAPIURL,
+							id: rest.checkID,
+							name: rest.checkName,
+							repo: rest.repo,
+							sha: rest.sha,
+							status: rest.status.toString(),
+							testPort: port,
+							token: rest.token,
+						};
+
+						const { error, checkID } = await runAction(props);
+
+						expect(error).toBe(expectedError);
+						expect(checkID).toBe(expectedCheckID);
+						if (expectedRequests === undefined) {
+							expect(requests).toEqual([]);
+						} else {
+							expect(requests).toEqual(expectedRequests);
+						}
+					});
+				},
+			);
+		},
+	);
 });
