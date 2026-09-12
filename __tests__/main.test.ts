@@ -282,6 +282,8 @@ describe("run action", () => {
 		const options: ExecSyncOptions = {
 			env: {
 				...env,
+				GITHUB_EVENT_NAME: "",
+				GITHUB_EVENT_PATH: "",
 				GITHUB_REPOSITORY: "LB/ABC",
 				GITHUB_SHA: "SHA1",
 				INPUT_CONCLUSION: conclusion,
