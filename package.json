@@ -8,11 +8,11 @@
 	},
 	"description": "GitHub Action which wraps calls to GitHub Checks API",
 	"devDependencies": {
-		"@biomejs/biome": "2.5.14",
+		"@biomejs/biome": "2.5.15",
 		"@octokit/core": "^7.0.8",
 		"@octokit/openapi-types": "^29.0.1",
 		"@octokit/plugin-rest-endpoint-methods": "^18.0.0",
-		"@types/node": "^26.6.3",
+		"@types/node": "^26.6.4",
 		"typescript": "^7.0.2"
 	},
 	"funding": {
